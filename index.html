@@ -1,0 +1,3069 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QRCraft — Premium QR Code Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/qr-code-styling@1.9.2/lib/qr-code-styling.js"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --page: #0b0f19;
+        --surface: #111827;
+        --surface-raised: #151e2d;
+        --surface-soft: #1b2638;
+        --border: #273449;
+        --border-strong: #35445c;
+        --text: #e6edf7;
+        --muted: #9aa9bf;
+        --subtle: #718198;
+        --accent: #818cf8;
+        --accent-strong: #6366f1;
+        background: var(--page);
+      }
+
+      html,
+      body,
+      body.bg-slate-50 {
+        min-height: 100%;
+        background: var(--page) !important;
+        color: var(--text);
+      }
+
+      body .bg-white,
+      body [class*="bg-white/"] {
+        background-color: var(--surface) !important;
+      }
+
+      body .bg-slate-50,
+      body [class*="bg-[#f8fafc]"] {
+        background-color: var(--surface-raised) !important;
+      }
+
+      body .bg-slate-100,
+      body .bg-indigo-50 {
+        background-color: var(--surface-soft) !important;
+      }
+
+      body .bg-slate-200 {
+        background-color: #334155 !important;
+      }
+
+      body .bg-slate-300 {
+        background-color: #52627a !important;
+      }
+
+      body .bg-indigo-100 {
+        background-color: #252956 !important;
+      }
+
+      body [class*="from-indigo-50"][class*="to-violet-50"] {
+        background-image: linear-gradient(135deg, #171d34, #252956) !important;
+      }
+
+      body .border-slate-100,
+      body .border-slate-200,
+      body .border-slate-300,
+      body [class*="border-[#e2e8f0]"] {
+        border-color: var(--border) !important;
+      }
+
+      body .border-indigo-100 {
+        border-color: #363d70 !important;
+      }
+
+      body .border-indigo-600,
+      body [class*="hover:border-indigo-600"]:hover {
+        border-color: var(--accent-strong) !important;
+      }
+
+      body .bg-indigo-600 {
+        background-color: var(--accent-strong) !important;
+      }
+
+      body .bg-indigo-700,
+      body [class*="hover:bg-indigo-700"]:hover {
+        background-color: #5558df !important;
+      }
+
+      body .text-slate-900,
+      body .text-slate-800,
+      body .text-slate-700 {
+        color: var(--text) !important;
+      }
+
+      body .text-slate-600,
+      body .text-slate-500,
+      body .text-slate-400,
+      body [class*="text-[#64748b]"],
+      body [class*="text-[#475569]"] {
+        color: var(--muted) !important;
+      }
+
+      body .text-indigo-600,
+      body .text-indigo-700,
+      body [class*="hover:text-indigo-700"]:hover {
+        color: #a5b4fc !important;
+      }
+
+      body [class*="before:from-white"]::before {
+        --tw-gradient-from: var(--surface) var(--tw-gradient-from-position);
+        --tw-gradient-to: rgb(17 24 39 / 0%) var(--tw-gradient-to-position);
+      }
+
+      body [class*="after:from-white"]::after {
+        --tw-gradient-from: var(--surface) var(--tw-gradient-from-position);
+        --tw-gradient-to: rgb(17 24 39 / 0%) var(--tw-gradient-to-position);
+      }
+
+      nav {
+        border-color: var(--border) !important;
+        background-color: rgb(15 21 34 / 92%) !important;
+      }
+
+      .editor-section {
+        background:
+          radial-gradient(ellipse at 50% 0%, rgb(49 46 129 / 12%), transparent 52%),
+          var(--page);
+      }
+
+      .editor-controls,
+      .editor-export,
+      .preview-card,
+      .modal {
+        border-color: var(--border) !important;
+        background-color: var(--surface) !important;
+        box-shadow: 0 18px 45px rgb(0 0 0 / 20%);
+      }
+
+      .preview-card {
+        background-image: repeating-conic-gradient(#1c2637 0% 25%, #151e2d 0% 50%) !important;
+        background-size: 20px 20px !important;
+      }
+
+      .editor-export h3 {
+        color: var(--text);
+        font-weight: 700;
+      }
+
+      .editor-export h3 i {
+        color: var(--accent);
+      }
+
+      .tab-scroll-wrap,
+      .form-group.border-t {
+        border-color: var(--border) !important;
+      }
+
+      .tab-btn.active {
+        color: #a5b4fc !important;
+      }
+
+      .type-btn.active,
+      .option-btn.active {
+        border-color: #6366f1 !important;
+        background-color: #252956 !important;
+        color: #c7d2fe !important;
+      }
+
+      .type-btn:not(.active):hover,
+      .option-btn:not(.active):hover,
+      .btn-secondary:hover {
+        border-color: var(--border-strong) !important;
+        background-color: var(--surface-soft) !important;
+      }
+
+      .sub-tabs {
+        background-color: var(--surface-raised) !important;
+      }
+
+      .modal-overlay {
+        background-color: rgb(3 7 18 / 72%) !important;
+      }
+
+      .modal-icon.info {
+        background-color: #252956 !important;
+        color: #a5b4fc !important;
+      }
+
+      .modal-icon.warning {
+        background-color: #3b2b17 !important;
+        color: #fbbf24 !important;
+      }
+
+      .modal-icon.danger {
+        background-color: #3d2028 !important;
+        color: #fb7185 !important;
+      }
+
+      .modal-icon.success {
+        background-color: #16352e !important;
+        color: #6ee7b7 !important;
+      }
+
+      .alert.warning {
+        background-color: #352919 !important;
+        color: #fcd34d !important;
+      }
+
+      .toast-container .toast {
+        border-color: var(--border) !important;
+        background-color: var(--surface-raised) !important;
+        color: var(--text) !important;
+      }
+
+      .toast.success i {
+        color: #6ee7b7 !important;
+      }
+
+      .toast.error i {
+        color: #fb7185 !important;
+      }
+
+      .toast.info i {
+        color: #a5b4fc !important;
+      }
+
+      .templates-grid .template-card {
+        border-color: var(--border) !important;
+        background-color: var(--surface-raised) !important;
+        color: var(--text);
+      }
+
+      .templates-grid .template-card:hover {
+        border-color: var(--accent-strong) !important;
+      }
+
+      .logo-drop-zone {
+        position: relative;
+        border: 1px dashed var(--border-strong);
+        background: var(--surface-raised);
+        transition:
+          border-color 180ms ease,
+          background-color 180ms ease;
+      }
+
+      .logo-drop-zone.dragging {
+        border-color: var(--accent);
+        background: #202747;
+      }
+
+      .logo-drop-zone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        opacity: 0;
+      }
+
+      .logo-search-results button {
+        min-width: 0;
+      }
+
+      .logo-search-results img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+      }
+
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+      select,
+      textarea {
+        border-color: var(--border) !important;
+        background-color: #0d1421 !important;
+        color: var(--text) !important;
+        color-scheme: dark;
+      }
+
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--accent-strong) !important;
+        box-shadow: 0 0 0 3px rgb(99 102 241 / 18%);
+      }
+
+      input[type="color"] {
+        border: 1px solid var(--border) !important;
+        background: var(--surface-raised) !important;
+      }
+
+      input[type="range"] {
+        accent-color: var(--accent-strong);
+      }
+
+      input[type="checkbox"] {
+        accent-color: var(--accent-strong);
+      }
+
+      ::placeholder {
+        color: var(--subtle) !important;
+        opacity: 1;
+      }
+
+      select option {
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      :focus-visible {
+        outline: 2px solid #818cf8;
+        outline-offset: 2px;
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #0d1421;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border: 2px solid #0d1421;
+        border-radius: 999px;
+        background: #35445c;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4a5c78;
+      }
+
+      @media (max-width: 768px) {
+        .editor-section {
+          padding-top: 1rem;
+        }
+
+        .editor-layout {
+          padding-right: 1rem;
+          padding-left: 1rem;
+        }
+
+        .preview-card {
+          min-height: 320px;
+        }
+      }
+
+      .option-btn svg [fill="#000000"] {
+        fill: #b7c3d6 !important;
+      }
+
+      ::selection {
+        background: #4f46e5;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-slate-50 font-sans leading-normal text-slate-900 antialiased">
+ <nav
+  class="sticky top-0 z-[100] h-[4.25rem] border-b border-[#e2e8f0] bg-white/[0.92] backdrop-blur-[14px]"
+>
+  <div
+    class="mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-6"
+  >
+    <a
+      href="#"
+      class="flex shrink-0 items-center gap-2 text-[1.3rem] font-extrabold text-[white]"
+      ><i class="ph-fill ph-qr-code text-[1.7rem]"></i> QRCraft</a
+    >
+    <div class="flex items-center gap-3">
+      <span
+        class="flex items-center gap-[0.35rem] rounded-full border border-[#e2e8f0] bg-[#f8fafc] px-[0.7rem] py-[0.35rem] text-[0.7rem] text-[#64748b] max-[768px]:hidden"
+        ><i class="ph ph-lightning"></i> qr-code-styling v1.9.2</span
+      >
+      <div class="flex items-center gap-2">
+        <a
+          href="https://github.com/ranjan-builds"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-[#e2e8f0] bg-[#f8fafc] text-[1.1rem] text-[#475569] transition-colors hover:bg-[#4f46e5] hover:text-white"
+          ><i class="ph ph-github-logo"></i
+        ></a>
+        <a
+          href="mailto:ranjan.sandbox@gmail.com"
+          aria-label="Email"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-[#e2e8f0] bg-[#f8fafc] text-[1.1rem] text-[#475569] transition-colors hover:bg-[#4f46e5] hover:text-white"
+          ><i class="ph ph-envelope-simple"></i
+        ></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    <div id="editor-view" class="editor-section min-h-[calc(100vh-4.25rem)] px-0 pb-8 pt-5">
+      <div class="container editor-layout mx-auto w-full max-w-[1400px] px-6 grid grid-cols-[400px_1fr_300px] items-start gap-6 max-[1200px]:grid-cols-1">
+        <div class="editor-controls sticky top-[5.5rem] flex h-[calc(100vh-7rem)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md max-[1200px]:relative max-[1200px]:top-0 max-[1200px]:h-auto max-[1200px]:max-h-[700px]">
+          <div class="tab-scroll-wrap relative shrink-0 border-b border-slate-200 before:content-[''] after:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:z-[2] before:w-8 before:pointer-events-none before:opacity-0 before:transition-opacity before:bg-gradient-to-r before:from-white before:to-transparent after:absolute after:right-0 after:top-0 after:bottom-0 after:z-[2] after:w-8 after:pointer-events-none after:opacity-0 after:transition-opacity after:bg-gradient-to-l after:from-white after:to-transparent [&.can-scroll-left:before]:opacity-100 [&.can-scroll-right:after]:opacity-100" id="tab-scroll-wrap">
+            <div class="control-tabs flex scroll-smooth overflow-x-auto px-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" id="control-tabs">
+              <button class="tab-btn active flex shrink-0 items-center gap-[0.4rem] whitespace-nowrap border-b-2 border-transparent px-[0.85rem] py-4 text-[0.8rem] font-medium text-slate-500 transition-colors hover:text-slate-900 [&_i]:text-[1.05rem] [&.active]:border-indigo-600 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-tab="content">
+                <i class="ph ph-link"></i> Content
+              </button>
+              <button class="tab-btn flex shrink-0 items-center gap-[0.4rem] whitespace-nowrap border-b-2 border-transparent px-[0.85rem] py-4 text-[0.8rem] font-medium text-slate-500 transition-colors hover:text-slate-900 [&_i]:text-[1.05rem] [&.active]:border-indigo-600 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-tab="style">
+                <i class="ph ph-palette"></i> Style
+              </button>
+              <button class="tab-btn flex shrink-0 items-center gap-[0.4rem] whitespace-nowrap border-b-2 border-transparent px-[0.85rem] py-4 text-[0.8rem] font-medium text-slate-500 transition-colors hover:text-slate-900 [&_i]:text-[1.05rem] [&.active]:border-indigo-600 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-tab="colors">
+                <i class="ph ph-paint-bucket"></i> Colors
+              </button>
+              <button class="tab-btn flex shrink-0 items-center gap-[0.4rem] whitespace-nowrap border-b-2 border-transparent px-[0.85rem] py-4 text-[0.8rem] font-medium text-slate-500 transition-colors hover:text-slate-900 [&_i]:text-[1.05rem] [&.active]:border-indigo-600 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-tab="logo">
+                <i class="ph ph-image"></i> Logo
+              </button>
+              <button class="tab-btn flex shrink-0 items-center gap-[0.4rem] whitespace-nowrap border-b-2 border-transparent px-[0.85rem] py-4 text-[0.8rem] font-medium text-slate-500 transition-colors hover:text-slate-900 [&_i]:text-[1.05rem] [&.active]:border-indigo-600 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-tab="layout">
+                <i class="ph ph-arrows-out"></i> Layout
+              </button>
+              <button class="tab-btn flex shrink-0 items-center gap-[0.4rem] whitespace-nowrap border-b-2 border-transparent px-[0.85rem] py-4 text-[0.8rem] font-medium text-slate-500 transition-colors hover:text-slate-900 [&_i]:text-[1.05rem] [&.active]:border-indigo-600 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-tab="templates">
+                <i class="ph ph-squares-four"></i> Templates
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTENT -->
+          <div class="tab-content active hidden flex-1 overflow-y-auto p-5 [&.active]:block" id="tab-content">
+            <div class="type-selector mb-5 grid grid-cols-3 gap-[0.4rem] max-[768px]:grid-cols-2">
+              <button class="type-btn active flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="url">
+                <i class="ph ph-link"></i> URL
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="text">
+                <i class="ph ph-text-t"></i> Text
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="email">
+                <i class="ph ph-envelope-simple"></i> Email
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="phone">
+                <i class="ph ph-phone"></i> Phone
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="sms">
+                <i class="ph ph-chat-text"></i> SMS
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="wifi">
+                <i class="ph ph-wifi-high"></i> Wi-Fi
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="vcard">
+                <i class="ph ph-address-book"></i> vCard
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="geo">
+                <i class="ph ph-map-pin"></i> Geo
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="event">
+                <i class="ph ph-calendar-blank"></i> Event
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="whatsapp">
+                <i class="ph ph-whatsapp-logo"></i> WhatsApp
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="telegram">
+                <i class="ph ph-telegram-logo"></i> Telegram
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="bitcoin">
+                <i class="ph ph-currency-btc"></i> Bitcoin
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="otp">
+                <i class="ph ph-key"></i> OTP
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="facetime">
+                <i class="ph ph-video-camera"></i> FaceTime
+              </button>
+              <button class="type-btn flex flex-col items-center gap-[0.3rem] rounded-xl border border-slate-200 bg-white px-[0.4rem] py-[0.65rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-900 [&_i]:text-[1.35rem] [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-type="mecard">
+                <i class="ph ph-user-circle"></i> MECARD
+              </button>
+            </div>
+            <div id="input-url" class="dynamic-input">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Website URL</label
+                ><input type="url" id="qr-url" value="https://qrcraft.dev" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-text" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Your Text</label
+                ><textarea
+                  id="qr-text"
+                  rows="4"
+                  placeholder="Enter text..."
+                 class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100"></textarea>
+              </div>
+            </div>
+            <div id="input-email" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Email</label
+                ><input
+                  type="email"
+                  id="qr-email"
+                  placeholder="hello@example.com" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Subject</label
+                ><input type="text" id="qr-email-sub" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Body</label
+                ><textarea id="qr-email-body" rows="3" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100"></textarea>
+              </div>
+            </div>
+            <div id="input-phone" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Phone</label
+                ><input
+                  type="tel"
+                  id="qr-phone"
+                  placeholder="+1 234 567 8900" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-sms" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Phone</label
+                ><input type="tel" id="qr-sms-phone" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Message</label
+                ><textarea id="qr-sms-msg" rows="3" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100"></textarea>
+              </div>
+            </div>
+            <div id="input-wifi" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">SSID</label
+                ><input type="text" id="qr-wifi-ssid" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Password</label
+                ><input type="text" id="qr-wifi-pass" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Encryption</label
+                ><select id="qr-wifi-type" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                  <option value="WPA">WPA/WPA2/WPA3</option>
+                  <option value="WEP">WEP</option>
+                  <option value="nopass">None</option>
+                </select>
+              </div>
+            </div>
+            <div id="input-vcard" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Full Name</label
+                ><input type="text" id="qr-vcard-name" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Phone</label
+                ><input type="text" id="qr-vcard-phone" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Email</label
+                ><input type="email" id="qr-vcard-email" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Company</label
+                ><input type="text" id="qr-vcard-company" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-geo" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Latitude</label
+                ><input
+                  type="number"
+                  id="qr-geo-lat"
+                  step="any"
+                  value="48.8584" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Longitude</label
+                ><input
+                  type="number"
+                  id="qr-geo-lng"
+                  step="any"
+                  value="2.2945" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-event" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Title</label
+                ><input type="text" id="qr-event-title" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Location</label
+                ><input type="text" id="qr-event-loc" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Start</label
+                ><input
+                  type="text"
+                  id="qr-event-start"
+                  placeholder="20260101T100000" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">End</label
+                ><input
+                  type="text"
+                  id="qr-event-end"
+                  placeholder="20260101T120000" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-whatsapp" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Phone (with country code)</label
+                ><input type="tel" id="qr-wa-phone" placeholder="+1234567890" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Message (Optional)</label
+                ><textarea id="qr-wa-msg" rows="3" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100"></textarea>
+              </div>
+            </div>
+            <div id="input-telegram" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Username (without @)</label
+                ><input type="text" id="qr-tg-user" placeholder="username" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-bitcoin" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Bitcoin Address</label
+                ><input
+                  type="text"
+                  id="qr-btc-address"
+                  placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Amount (BTC, Optional)</label
+                ><input type="number" id="qr-btc-amount" step="0.00000001" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Label (Optional)</label
+                ><input type="text" id="qr-btc-label" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-otp" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Secret (Base32)</label
+                ><input
+                  type="text"
+                  id="qr-otp-secret"
+                  placeholder="JBSWY3DPEHPK3PXP" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Issuer</label
+                ><input type="text" id="qr-otp-issuer" placeholder="MyApp" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Account</label
+                ><input
+                  type="text"
+                  id="qr-otp-account"
+                  placeholder="user@example.com" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-facetime" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">FaceTime Address</label
+                ><input
+                  type="text"
+                  id="qr-facetime"
+                  placeholder="user@example.com or +1234567890" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+            <div id="input-mecard" class="dynamic-input hidden">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Name</label
+                ><input type="text" id="qr-mecard-name" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Phone</label
+                ><input type="tel" id="qr-mecard-phone" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Email</label
+                ><input type="email" id="qr-mecard-email" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Company</label
+                ><input type="text" id="qr-mecard-org" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              </div>
+            </div>
+          </div>
+
+          <!-- STYLE -->
+          <div class="tab-content hidden flex-1 overflow-y-auto p-5 [&.active]:block" id="tab-style">
+           <div class="form-group mb-5">
+  <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Dot Style</label>
+  <div class="options-grid grid grid-cols-5 gap-[0.4rem] max-[768px]:grid-cols-4" id="pattern-options">
+    <button
+      class="option-btn active flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[36px] [&_svg]:w-[36px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]"
+      data-val="square"
+      title="square"
+    >
+    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 80 80"><g fill="#000000"><path d="M48,32h16v32h-16v-8h8v-8h-8v-8h-8v-8h-8v-8h8v-8h8v16Zm8-16v8h8v-8h-8Zm-24,8v-8H16v16h8v-8h8Zm16,24v8h-8v8H16v-24h8v-8h8v8h8v8h8Zm-16,0h-8v8h8v-8Z"></path></g></svg>
+    </button>
+    <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[36px] [&_svg]:w-[36px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="rounded" title="rounded">
+     <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 80 80"><g fill="#000000"><path d="M58,16h4c1.1,0,2,.9,2,2v4c0,1.1-.9,2-2,2h-4c-1.1,0-2-.9-2-2v-4c0-1.1,.9-2,2-2ZM18,32h4c1.1,0,2-.9,2-2v-6h6c1.1,0,2-.9,2-2v-4c0-1.1-.9-2-2-2h-12c-1.1,0-2,.9-2,2v12c0,1.1,.9,2,2,2Zm30,18c0-1.1-.9-2-2-2h-6v-6c0-1.1-.9-2-2-2h-6v-6c0-1.1-.9-2-2-2h-4c-1.1,0-2,.9-2,2v6h-6c-1.1,0-2,.9-2,2v20c0,1.1,.9,2,2,2h20c1.1,0,2-.9,2-2v-6h6c1.1,0,2-.9,2-2v-4Zm-16,6h-8v-8h8v8Zm30-24h-14v-14c0-1.1-.9-2-2-2h-4c-1.1,0-2,.9-2,2v6h-6c-1.1,0-2,.9-2,2v4c0,1.1,.9,2,2,2h6v6c0,1.1,.9,2,2,2h6v6c0,1.1,.9,2,2,2h6v8h-6c-1.1,0-2,.9-2,2v4c0,1.1,.9,2,2,2h12c1.1,0,2-.9,2-2v-28c0-1.1-.9-2-2-2Z"></path></g></svg>
+    </button>
+    <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[36px] [&_svg]:w-[36px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="dots" title="dots">
+      <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 80 80"><g fill="#000000"><path d="M28,32c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8,8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm-8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm-8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm16,16c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm-8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm-8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm16-8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm-16,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm16-24c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8-8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm0,8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm0,8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8-16c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm0,16c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm0,8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4ZM20,24c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm0-8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm16,32c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8-8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm8,8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm0,8c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Zm-8,0c2.21,0,4,1.79,4,4s-1.79,4-4,4-4-1.79-4-4,1.79-4,4-4Z"></path></g></svg>
+    </button>
+    <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[36px] [&_svg]:w-[36px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="classy" title="classy">
+    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 80 80"><g fill="#000000"><path d="M59,16h2c1.66,0,3,1.34,3,3v2c0,1.66-1.34,3-3,3h-2c-1.66,0-3-1.34-3-3v-2c0-1.66,1.34-3,3-3Zm1,16h-12v-12c0-2.21-1.79-4-4-4s-4,1.79-4,4v4h-4c-2.21,0-4,1.79-4,4s1.79,4,4,4h4v4c0,2.21,1.79,4,4,4h4v4c0,2.21,1.79,4,4,4h4v8h-4c-2.21,0-4,1.79-4,4s1.79,4,4,4h8c2.21,0,4-1.79,4-4v-24c0-2.21-1.79-4-4-4Zm-40,0c2.21,0,4-1.79,4-4v-4h4c2.21,0,4-1.79,4-4s-1.79-4-4-4h-8c-2.21,0-4,1.79-4,4v8c0,2.21,1.79,4,4,4Zm24,16h-4v-4c0-2.21-1.79-4-4-4h-4v-4c0-2.21-1.79-4-4-4s-4,1.79-4,4v4h-4c-2.21,0-4,1.79-4,4v16c0,2.21,1.79,4,4,4h16c2.21,0,4-1.79,4-4v-4h4c2.21,0,4-1.79,4-4s-1.79-4-4-4Zm-12,8h-8v-8h8v8Z"></path></g></svg>
+    </button>
+    <button
+      class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[36px] [&_svg]:w-[36px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]"
+      data-val="classy-rounded"
+      title="classy-rounded"
+    >
+   <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 80 80"><g fill="#000000"><path d="M48,32V16h-6c-1.1,0-2,.9-2,2v6h-6c-1.1,0-2,.9-2,2v6h8v8h8v8h8v8h-6c-1.1,0-2,.9-2,2v6h14c1.1,0,2-.9,2-2v-30h-16Zm10-16c-1.1,0-2,.9-2,2v6h6c1.1,0,2-.9,2-2v-6h-6ZM24,30v-6h6c1.1,0,2-.9,2-2v-6h-14c-1.1,0-2,.9-2,2v14h6c1.1,0,2-.9,2-2Zm16,10h-8v-8h-6c-1.1,0-2,.9-2,2v6h-6c-1.1,0-2,.9-2,2v22h22c1.1,0,2-.9,2-2v-6h6c1.1,0,2-.9,2-2v-6h-8v-8Zm-8,16h-8v-8h8v8Z"></path></g></svg>
+    </button>
+    <button
+      class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[36px] [&_svg]:w-[36px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]"
+      data-val="extra-rounded"
+      title="extra-rounded"
+    >
+   <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 80 80"><g fill="#000000"><path d="M47.91,32c.09-.33,.09-16,.09-16h-2c-3.31,0-6,2.69-6,6v2h-2c-3.31,0-6,2.69-6,6v2h8v8h8v8h8v8h-2c-3.31,0-6,2.69-6,6v2h10c3.31,0,6-2.69,6-6h0v-26h-16.09Zm14.09-16c-3.31,0-6,2.69-6,6v2h2c3.31,0,6-2.69,6-6v-2h-2ZM24,26v-2h2c3.31,0,6-2.69,6-6v-2h-10c-3.31,0-6,2.69-6,6v10h2c3.31,0,6-2.69,6-6Zm16,14h-8v-8h-2c-3.31,0-6,2.69-6,6v2h-2c-3.31,0-6,2.69-6,6v18h18c3.31,0,6-2.69,6-6h0v-2h2c3.31,0,6-2.69,6-6v-2h-8v-8Zm-16,16v-8h8v8h-8Z"></path></g></svg>
+    </button>
+  </div>
+</div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Corner Square Style</label>
+              <div class="options-grid grid grid-cols-5 gap-[0.4rem] max-[768px]:grid-cols-4" id="corners-square-options">
+                <button class="option-btn active flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="square">
+                 <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><defs></defs><path fill="#000000" d="M0,0V24H24V0ZM20,20H4V4H20Z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="dot">
+             <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><defs></defs><path fill="#000000" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0Zm0,20a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="extra-rounded">
+               <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><defs></defs><path fill="#000000" d="M18,0H6A6,6,0,0,0,0,6V18a6,6,0,0,0,6,6H18a6,6,0,0,0,6-6V6A6,6,0,0,0,18,0Zm2,18a2,2,0,0,1-2,2H6a2,2,0,0,1-2-2V6A2,2,0,0,1,6,4H18a2,2,0,0,1,2,2Z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="rounded">
+              <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><defs></defs><path fill="#000000" d="M3,0A3,3,0,0,0,0,3V24H21a3,3,0,0,0,3-3V0ZM20,20H4V4H20Z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="dots">
+<svg
+  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+  focusable="false"
+  aria-hidden="true"
+  viewBox="0 0 100 100"
+>
+  <g fill="#000000">
+    <!-- Left -->
+    <circle cx="12" cy="32" r="10" />
+    <circle cx="12" cy="50" r="10" />
+    <circle cx="12" cy="68" r="10" />
+
+    <!-- Right -->
+    <circle cx="88" cy="32" r="10" />
+    <circle cx="88" cy="50" r="10" />
+    <circle cx="88" cy="68" r="10" />
+
+    <!-- Top -->
+    <circle cx="32" cy="12" r="10" />
+    <circle cx="50" cy="12" r="10" />
+    <circle cx="68" cy="12" r="10" />
+
+    <!-- Bottom -->
+    <circle cx="32" cy="88" r="10" />
+    <circle cx="50" cy="88" r="10" />
+    <circle cx="68" cy="88" r="10" />
+  </g>
+</svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="classy">
+           <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><defs></defs><path fill="#000000" d="M3,0A3,3,0,0,0,0,3V24H21a3,3,0,0,0,3-3V0ZM20,20H4V4H20Z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="classy-rounded">
+             <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><defs></defs><path fill="#000000" d="m16.28 0h-16.28v16.28c0 4.26 3.46 7.72 7.72 7.72h16.28v-16.28c0-4.26-3.46-7.72-7.72-7.72zm4.72 21h-13.28c-2.6 0-4.72-2.12-4.72-4.72v-13.28h13.28c2.6 0 4.72 2.12 4.72 4.72v13.28z"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Corner Dot Style</label>
+              <div class="options-grid grid grid-cols-5 gap-[0.4rem] max-[768px]:grid-cols-4" id="corners-dot-options">
+                <button class="option-btn active flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="square">
+                 <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 8 8"><defs></defs><path fill="#000000" d="m0 0 8 0 0 8-8 0z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="dot">
+                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 8 8"><defs></defs><path fill="#000000" d="m4 0a4 4 0 110 8 4 4 0 110-8"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="rounded">
+               <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 14 14"><defs></defs><path fill="#000000" d="m10 14h-6c-2.21 0-4-1.79-4-4v-6c0-2.21 1.79-4 4-4h6c2.21 0 4 1.79 4 4v6c0 2.21-1.79 4-4 4z"></path></svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="extra-rounded">
+             <svg
+  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv"
+  focusable="false"
+  aria-hidden="true"
+  viewBox="0 0 14 14"
+>
+  <rect
+    x="0"
+    y="0"
+    width="14"
+    height="14"
+    rx="5"
+    fill="#000000"
+  />
+</svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="dots">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#000000">
+    <circle cx="30" cy="30" r="15" />
+    <circle cx="60" cy="30" r="15" />
+    <circle cx="90" cy="30" r="15" />
+
+    <circle cx="30" cy="60" r="15" />
+    <circle cx="60" cy="60" r="15" />
+    <circle cx="90" cy="60" r="15" />
+
+    <circle cx="30" cy="90" r="15" />
+    <circle cx="60" cy="90" r="15" />
+    <circle cx="90" cy="90" r="15" />
+  </g>
+</svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="classy">
+<svg
+  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv"
+  focusable="false"
+  aria-hidden="true"
+  viewBox="0 0 14 14"
+>
+  <path
+    d="M2 0
+       H14
+       V12
+       A2 2 0 0 1 12 14
+       H0
+       V2
+       A2 2 0 0 1 2 0
+       Z"
+    fill="#000000"
+  />
+</svg>
+                </button>
+                <button class="option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_svg]:h-[22px] [&_svg]:w-[22px] [&_svg]:fill-current [&.active]:border-indigo-600 [&.active]:bg-indigo-100 [&.active]:text-indigo-600 cursor-pointer transition-all duration-[180ms]" data-val="classy-rounded">
+<svg
+  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv"
+  focusable="false"
+  aria-hidden="true"
+  viewBox="0 0 14 14"
+>
+  <path
+    d="M4 0
+       H14
+       V10
+       A4 4 0 0 1 10 14
+       H0
+       V4
+       A4 4 0 0 1 4 0
+       Z"
+    fill="#000000"
+  />
+</svg>
+                </button>
+              </div>
+            </div>
+            <div class="slider-group mb-5">
+              <div class="slider-header mb-[0.4rem] flex justify-between text-[0.8rem] font-medium [&_span:last-child]:tabular-nums [&_span:last-child]:text-slate-500">
+                <span>Error Correction</span
+                ><span id="error-val">Medium (15%)</span>
+              </div>
+              <input
+                type="range"
+                id="error-slider"
+                min="0"
+                max="3"
+                value="1"
+                step="1" class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" / class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]">
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">QR Shape</label>
+              <select id="qr-shape" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                <option value="square">Square</option>
+                <option value="circle">Circle (adds random dots)</option>
+              </select>
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Render Type</label>
+              <select id="qr-type" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                <option value="canvas">Canvas</option>
+                <option value="svg">SVG</option>
+              </select>
+            </div>
+            <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold">
+              <label>Round dot sizes</label>
+              <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                ><input type="checkbox" id="round-size" checked class="peer sr-only" /><span
+                  class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                ></span
+              ></label>
+            </div>
+          </div>
+
+          <!-- COLORS -->
+          <div class="tab-content hidden flex-1 overflow-y-auto p-5 [&.active]:block" id="tab-colors">
+            <div class="alert warning mt-3 flex items-start gap-2 rounded-xl bg-indigo-100 p-3 text-[0.8rem] leading-[1.4] text-indigo-600 [&_i]:mt-[0.1rem] [&_i]:shrink-0 [&.warning]:bg-amber-100 [&.warning]:text-amber-800 mb-3">
+              <i class="ph-fill ph-warning"></i>
+              <span
+                >Toggling a gradient off restores the last solid color for that
+                element.</span
+              >
+            </div>
+            <div class="sub-tabs mb-3 flex gap-1 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" id="color-subtabs">
+              <button class="sub-tab active flex-1 whitespace-nowrap rounded-lg px-2 py-2 text-[0.7rem] font-semibold text-slate-500 transition-all duration-[180ms] hover:text-indigo-700 [&.active]:bg-gradient-to-r [&.active]:from-indigo-600 [&.active]:to-violet-600 [&.active]:text-white [&.active]:shadow-md cursor-pointer" data-subtab="solid">
+                <i class="ph ph-drop"></i> Solid
+              </button>
+              <button class="sub-tab flex-1 whitespace-nowrap rounded-lg px-2 py-2 text-[0.7rem] font-semibold text-slate-500 transition-all duration-[180ms] hover:text-indigo-700 [&.active]:bg-gradient-to-r [&.active]:from-indigo-600 [&.active]:to-violet-600 [&.active]:text-white [&.active]:shadow-md cursor-pointer" data-subtab="dots-gradient">
+                <i class="ph ph-gradient"></i> Dots
+              </button>
+              <button class="sub-tab flex-1 whitespace-nowrap rounded-lg px-2 py-2 text-[0.7rem] font-semibold text-slate-500 transition-all duration-[180ms] hover:text-indigo-700 [&.active]:bg-gradient-to-r [&.active]:from-indigo-600 [&.active]:to-violet-600 [&.active]:text-white [&.active]:shadow-md cursor-pointer" data-subtab="bg-gradient">
+                <i class="ph ph-gradient"></i> BG
+              </button>
+              <button class="sub-tab flex-1 whitespace-nowrap rounded-lg px-2 py-2 text-[0.7rem] font-semibold text-slate-500 transition-all duration-[180ms] hover:text-indigo-700 [&.active]:bg-gradient-to-r [&.active]:from-indigo-600 [&.active]:to-violet-600 [&.active]:text-white [&.active]:shadow-md cursor-pointer" data-subtab="corner-gradient">
+                <i class="ph ph-gradient"></i> Corners
+              </button>
+            </div>
+
+            <div class="color-subview" id="color-solid">
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Foreground</label>
+                <div class="color-picker-group mb-3 flex items-center gap-3">
+                  <input type="color" id="color-fg" value="#0f172a" class="h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-xl border-0 p-0" /><input
+                    type="text"
+                    id="color-fg-text"
+                    value="#0f172a" class="grow w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+                </div>
+              </div>
+              <div class="form-group mb-5">
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Background</label>
+                <div class="color-picker-group mb-3 flex items-center gap-3">
+                  <input type="color" id="color-bg" value="#ffffff" class="h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-xl border-0 p-0" /><input
+                    type="text"
+                    id="color-bg-text"
+                    value="#ffffff" class="grow w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+                </div>
+                <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold mt-2.5">
+                  <label
+                     class="font-medium text-[0.8rem]">Transparent</label
+                  >
+                  <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                    ><input type="checkbox" id="bg-transparent" class="peer sr-only" /><span
+                      class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                    ></span
+                  ></label>
+                </div>
+              </div>
+              <div
+                class="form-group mb-5 border-t border-slate-200 pt-4"
+              >
+                <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Corner Colors</label>
+                <div class="color-picker-group mb-3 flex items-center gap-3">
+                  <input
+                    type="color"
+                    id="color-corner-sq"
+                    value="#0f172a" class="h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-xl border-0 p-0" /><span class="text-[0.8rem]">Corner square</span>
+                </div>
+                <div class="color-picker-group mb-3 flex items-center gap-3">
+                  <input
+                    type="color"
+                    id="color-corner-dt"
+                    value="#0f172a" class="h-10 w-10 shrink-0 cursor-pointer overflow-hidden rounded-xl border-0 p-0" /><span class="text-[0.8rem]">Corner dot</span>
+                </div>
+                <button
+                  class="btn-secondary inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50 w-full mt-1 text-xs cursor-pointer duration-[180ms]"
+                  id="btn-sync-colors"
+                >
+                  <i class="ph ph-arrows-clockwise"></i> Sync with foreground
+                </button>
+              </div>
+            </div>
+
+            <div class="color-subview hidden" id="color-dots-gradient">
+              <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold">
+                <label>Enable dots gradient</label>
+                <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                  ><input type="checkbox" id="grad-dots-enabled" class="peer sr-only" /><span
+                    class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                  ></span
+                ></label>
+              </div>
+              <div class="gradient-builder mb-3 rounded-xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-violet-50 p-3 shadow-sm">
+                <div class="gradient-row mb-2 flex items-center gap-2">
+                  <select
+                    id="grad-dots-type"
+                   class="!w-auto !px-2 !py-1.5 !text-xs w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                  </select>
+                  <input
+                    type="range"
+                    id="grad-dots-rotation"
+                    min="0"
+                    max="6.28"
+                    step="0.05"
+                    value="0" class="grow h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" />
+                  <span
+                    id="grad-dots-rot-label"
+                     class="text-[0.7rem] text-slate-500 w-[46px] text-right">0°</span
+                  >
+                </div>
+                <div class="gradient-stops flex flex-col gap-[0.4rem] [&_.gradient-stop]:flex [&_.gradient-stop]:items-center [&_.gradient-stop]:gap-2 [&_.stop-color]:h-7 [&_.stop-color]:w-7 [&_.stop-color]:shrink-0 [&_.stop-color]:cursor-pointer [&_.stop-color]:rounded-md [&_.stop-color]:border-0 [&_.stop-color]:p-0 [&_.stop-offset]:h-1 [&_.stop-offset]:flex-1 [&_.stop-label]:w-[34px] [&_.stop-label]:text-right [&_.stop-label]:text-[0.7rem] [&_.stop-label]:tabular-nums [&_.stop-label]:text-slate-500 [&_.stop-remove]:inline-flex [&_.stop-remove]:items-center [&_.stop-remove]:gap-1 [&_.stop-remove]:rounded [&_.stop-remove]:border [&_.stop-remove]:border-slate-200 [&_.stop-remove]:bg-white [&_.stop-remove]:p-[0.3rem] [&_.stop-remove]:text-[0.7rem] [&_.stop-remove]:font-medium [&_.stop-remove]:text-slate-500 [&_.stop-remove:hover]:border-red-500 [&_.stop-remove:hover]:bg-red-500 [&_.stop-remove:hover]:text-white" id="grad-dots-stops"></div>
+                <button
+                  class="btn-mini inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-[0.7rem] py-[0.4rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-indigo-600 hover:text-indigo-600 mt-2 cursor-pointer transition-all duration-[180ms]"
+                  id="grad-dots-add"
+                >
+                  <i class="ph ph-plus"></i> Add stop
+                </button>
+                <div class="gradient-preview mt-2 h-[34px] rounded-md border border-slate-200" id="grad-dots-preview"></div>
+              </div>
+            </div>
+
+            <div class="color-subview hidden" id="color-bg-gradient">
+              <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold">
+                <label>Enable background gradient</label>
+                <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                  ><input type="checkbox" id="grad-bg-enabled" class="peer sr-only" /><span
+                    class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                  ></span
+                ></label>
+              </div>
+              <div class="gradient-builder mb-3 rounded-xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-violet-50 p-3 shadow-sm">
+                <div class="gradient-row mb-2 flex items-center gap-2">
+                  <select
+                    id="grad-bg-type"
+                   class="w-auto px-2 py-1.5 text-xs w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                  </select>
+                  <input
+                    type="range"
+                    id="grad-bg-rotation"
+                    min="0"
+                    max="6.28"
+                    step="0.05"
+                    value="0" class="grow h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" />
+                  <span
+                    id="grad-bg-rot-label"
+                     class="text-[0.7rem] text-slate-500 w-[46px] text-right">0°</span
+                  >
+                </div>
+                <div class="gradient-stops flex flex-col gap-[0.4rem] [&_.gradient-stop]:flex [&_.gradient-stop]:items-center [&_.gradient-stop]:gap-2 [&_.stop-color]:h-7 [&_.stop-color]:w-7 [&_.stop-color]:shrink-0 [&_.stop-color]:cursor-pointer [&_.stop-color]:rounded-md [&_.stop-color]:border-0 [&_.stop-color]:p-0 [&_.stop-offset]:h-1 [&_.stop-offset]:flex-1 [&_.stop-label]:w-[34px] [&_.stop-label]:text-right [&_.stop-label]:text-[0.7rem] [&_.stop-label]:tabular-nums [&_.stop-label]:text-slate-500 [&_.stop-remove]:inline-flex [&_.stop-remove]:items-center [&_.stop-remove]:gap-1 [&_.stop-remove]:rounded [&_.stop-remove]:border [&_.stop-remove]:border-slate-200 [&_.stop-remove]:bg-white [&_.stop-remove]:p-[0.3rem] [&_.stop-remove]:text-[0.7rem] [&_.stop-remove]:font-medium [&_.stop-remove]:text-slate-500 [&_.stop-remove:hover]:border-red-500 [&_.stop-remove:hover]:bg-red-500 [&_.stop-remove:hover]:text-white" id="grad-bg-stops"></div>
+                <button
+                  class="btn-mini inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-[0.7rem] py-[0.4rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-indigo-600 hover:text-indigo-600 mt-2 cursor-pointer transition-all duration-[180ms]"
+                  id="grad-bg-add"
+                >
+                  <i class="ph ph-plus"></i> Add stop
+                </button>
+                <div class="gradient-preview mt-2 h-[34px] rounded-md border border-slate-200" id="grad-bg-preview"></div>
+              </div>
+            </div>
+
+            <div class="color-subview hidden" id="color-corner-gradient">
+              <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold">
+                <label>Enable corner gradient</label>
+                <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                  ><input type="checkbox" id="grad-corner-enabled" class="peer sr-only" /><span
+                    class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-hint mt-1 text-[0.7rem] leading-[1.4] text-slate-500 mb-2.5">
+                Applied to both corner squares and corner dots.
+              </div>
+              <div class="gradient-builder mb-3 rounded-xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-violet-50 p-3 shadow-sm">
+                <div class="gradient-row mb-2 flex items-center gap-2">
+                  <select
+                    id="grad-corner-type"
+                   class="w-auto px-2 py-1.5 text-xs w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                  </select>
+                  <input
+                    type="range"
+                    id="grad-corner-rotation"
+                    min="0"
+                    max="6.28"
+                    step="0.05"
+                    value="0" class="grow h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" />
+                  <span
+                    id="grad-corner-rot-label"
+                     class="text-[0.7rem] text-slate-500 w-[46px] text-right">0°</span
+                  >
+                </div>
+                <div class="gradient-stops flex flex-col gap-[0.4rem] [&_.gradient-stop]:flex [&_.gradient-stop]:items-center [&_.gradient-stop]:gap-2 [&_.stop-color]:h-7 [&_.stop-color]:w-7 [&_.stop-color]:shrink-0 [&_.stop-color]:cursor-pointer [&_.stop-color]:rounded-md [&_.stop-color]:border-0 [&_.stop-color]:p-0 [&_.stop-offset]:h-1 [&_.stop-offset]:flex-1 [&_.stop-label]:w-[34px] [&_.stop-label]:text-right [&_.stop-label]:text-[0.7rem] [&_.stop-label]:tabular-nums [&_.stop-label]:text-slate-500 [&_.stop-remove]:inline-flex [&_.stop-remove]:items-center [&_.stop-remove]:gap-1 [&_.stop-remove]:rounded [&_.stop-remove]:border [&_.stop-remove]:border-slate-200 [&_.stop-remove]:bg-white [&_.stop-remove]:p-[0.3rem] [&_.stop-remove]:text-[0.7rem] [&_.stop-remove]:font-medium [&_.stop-remove]:text-slate-500 [&_.stop-remove:hover]:border-red-500 [&_.stop-remove:hover]:bg-red-500 [&_.stop-remove:hover]:text-white" id="grad-corner-stops"></div>
+                <button
+                  class="btn-mini inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-[0.7rem] py-[0.4rem] text-[0.7rem] font-medium text-slate-500 transition-colors hover:border-indigo-600 hover:text-indigo-600 mt-2 cursor-pointer transition-all duration-[180ms]"
+                  id="grad-corner-add"
+                >
+                  <i class="ph ph-plus"></i> Add stop
+                </button>
+                <div class="gradient-preview mt-2 h-[34px] rounded-md border border-slate-200" id="grad-corner-preview"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LOGO -->
+          <div class="tab-content hidden flex-1 overflow-y-auto p-5 [&.active]:block" id="tab-logo">
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Upload Logo</label>
+              <div class="logo-drop-zone mb-3 flex min-h-32 flex-col items-center justify-center gap-2 rounded-xl p-4 text-center" id="logo-drop-zone">
+                <i class="ph ph-upload-simple text-2xl text-indigo-400"></i>
+                <span class="text-sm font-semibold text-slate-900">Drop an image here or browse</span>
+                <span class="text-xs text-slate-500">PNG, JPEG, WebP, or SVG · up to 2 MB</span>
+                <input
+                  type="file"
+                  id="logo-upload"
+                  accept="image/png, image/jpeg, image/webp, image/svg+xml"
+                  aria-label="Upload a logo image" />
+              </div>
+              <button
+                class="btn-secondary inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50 w-full hidden cursor-pointer duration-[180ms]"
+                id="btn-remove-logo"
+              >
+                <i class="ph ph-trash"></i> Remove logo
+              </button>
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900" for="logo-search-input">Search free logos</label>
+              <form class="mb-2 flex gap-2" id="logo-search-form">
+                <input
+                  type="search"
+                  id="logo-search-input"
+                  class="min-w-0 grow rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none"
+                  placeholder="Search brands, e.g. GitHub"
+                  maxlength="64"
+                  autocomplete="off" />
+                <button class="btn-primary inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 font-semibold text-white" id="logo-search-button" type="submit">
+                  <i class="ph ph-magnifying-glass"></i><span>Search</span>
+                </button>
+              </form>
+              <p class="mb-2 text-xs leading-relaxed text-slate-500" id="logo-search-status" aria-live="polite">Search Simple Icons via Iconify. An internet connection is required.</p>
+              <div class="logo-search-results grid grid-cols-3 gap-2" id="logo-search-results"></div>
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Popular Logos</label>
+              <p class="mb-3 text-xs leading-relaxed text-slate-500">
+                Choose a built-in logo, or search for more above.
+              </p>
+              <div
+                class="options-grid grid grid-cols-5 gap-[0.4rem] max-[768px]:grid-cols-4 grid-cols-3 [&_img]:h-full [&_img]:w-full [&_img]:object-contain"
+                id="preloaded-logos"
+              >
+              </div>
+            </div>
+            <div class="slider-group mb-5">
+              <div class="slider-header mb-[0.4rem] flex justify-between text-[0.8rem] font-medium [&_span:last-child]:tabular-nums [&_span:last-child]:text-slate-500">
+                <span>Logo size</span><span id="logo-size-val">40%</span>
+              </div>
+              <input
+                type="range"
+                id="logo-size"
+                min="0.1"
+                max="0.6"
+                step="0.05"
+                value="0.4" class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" />
+            </div>
+            <div class="slider-group mb-5">
+              <div class="slider-header mb-[0.4rem] flex justify-between text-[0.8rem] font-medium [&_span:last-child]:tabular-nums [&_span:last-child]:text-slate-500">
+                <span>Logo margin</span><span id="logo-margin-val">5px</span>
+              </div>
+              <input
+                type="range"
+                id="logo-margin"
+                min="0"
+                max="30"
+                step="1"
+                value="5" class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" />
+            </div>
+            <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold">
+              <label>Hide dots behind logo</label>
+              <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                ><input type="checkbox" id="logo-bg-hide" checked class="peer sr-only" /><span
+                  class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                ></span
+              ></label>
+            </div>
+            <div class="toggle-row mb-2 flex items-center justify-between gap-4 [&_label]:text-[0.8rem] [&_label]:font-semibold">
+              <label>Save as blob in SVG</label>
+              <label class="switch relative inline-block h-[22px] w-[38px] shrink-0"
+                ><input type="checkbox" id="logo-save-blob" class="peer sr-only" /><span
+                  class="slider before:content-[''] absolute inset-0 cursor-pointer rounded-[22px] bg-slate-300 transition-colors before:absolute before:bottom-[3px] before:left-[3px] before:h-4 before:w-4 before:rounded-full before:bg-white before:shadow-[0_1px_2px_rgba(0,0,0,0.2)] before:transition-transform peer-checked:bg-indigo-600 peer-checked:before:translate-x-4"
+                ></span
+              ></label>
+            </div>
+          </div>
+
+          <!-- LAYOUT -->
+          <div class="tab-content hidden flex-1 overflow-y-auto p-5 [&.active]:block" id="tab-layout">
+            <div class="slider-group mb-5">
+              <div class="slider-header mb-[0.4rem] flex justify-between text-[0.8rem] font-medium [&_span:last-child]:tabular-nums [&_span:last-child]:text-slate-500">
+                <span>Width</span><span id="layout-width-val">1024px</span>
+              </div>
+              <input
+                type="range"
+                id="layout-width"
+                min="200"
+                max="2000"
+                step="50"
+                value="1024" class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" / class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]">
+            </div>
+            <div class="slider-group mb-5">
+              <div class="slider-header mb-[0.4rem] flex justify-between text-[0.8rem] font-medium [&_span:last-child]:tabular-nums [&_span:last-child]:text-slate-500">
+                <span>Margin</span><span id="layout-margin-val">90px</span>
+              </div>
+              <input
+                type="range"
+                id="layout-margin"
+                min="0"
+                max="400"
+                step="5"
+                value="90" class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" / class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]">
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Margin (fine control)</label>
+              <input
+                type="number"
+                id="layout-margin-num"
+                min="0"
+                max="800"
+                step="1"
+                value="90" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+              <div class="form-hint mt-1 text-[0.7rem] leading-[1.4] text-slate-500">
+                Enter a value directly for margins above 400px.
+              </div>
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900"
+                >typeNumber
+                <span
+                   class="text-slate-500 font-normal">(0 = auto)</span
+                ></label
+              >
+              <input
+                type="number"
+                id="layout-typenumber"
+                min="0"
+                max="40"
+                value="0" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100" />
+            </div>
+            <div class="form-group mb-5">
+              <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Mode</label>
+              <select id="layout-mode" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+                <option value="Byte">Byte</option>
+                <option value="Numeric">Numeric</option>
+                <option value="Alphanumeric">Alphanumeric</option>
+                <option value="Kanji">Kanji</option>
+              </select>
+            </div>
+            <div class="alert mt-3 flex items-start gap-2 rounded-xl bg-indigo-100 p-3 text-[0.8rem] leading-[1.4] text-indigo-600 [&_i]:mt-[0.1rem] [&_i]:shrink-0 [&.warning]:bg-amber-100 [&.warning]:text-amber-800">
+              <i class="ph-fill ph-info"></i
+              ><span
+                >Margin shifts the QR inward. Very large margins (&gt;200px) are
+                useful for print layouts.</span
+              >
+            </div>
+          </div>
+
+          <div class="tab-content hidden flex-1 overflow-y-auto p-5 [&.active]:block" id="tab-templates">
+            <div class="templates-grid grid grid-cols-2 gap-3 [&_.template-card]:cursor-pointer [&_.template-card]:rounded-xl [&_.template-card]:border [&_.template-card]:border-slate-200 [&_.template-card]:bg-slate-50 [&_.template-card]:p-3 [&_.template-card]:text-center [&_.template-card]:transition-all [&_.template-card:hover]:-translate-y-0.5 [&_.template-card:hover]:border-indigo-600 [&_.template-card:hover]:shadow-sm [&_.template-card_img]:mb-[0.35rem] [&_.template-card_img]:w-full [&_.template-card_img]:rounded-md [&_.template-name]:text-[0.7rem] [&_.template-name]:font-semibold" id="templates-container"></div>
+          </div>
+        </div>
+
+        <div class="editor-preview sticky top-[5.5rem] flex flex-col items-center max-[1200px]:relative max-[1200px]:top-0">
+          <div class="preview-card flex min-h-[420px] w-full items-center justify-center rounded-2xl border border-slate-200 bg-white bg-[repeating-conic-gradient(#f1f5f9_0%_25%,white_0%_50%)] bg-[length:20px_20px] p-6 shadow-lg">
+            <div class="preview-canvas-container relative flex max-w-full justify-center">
+              <canvas
+                id="live-preview-canvas" class="!h-auto max-w-full rounded-xl shadow-md"
+                width="400"
+                height="400"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-export sticky top-[5.5rem] rounded-2xl border border-slate-200 bg-white p-5 shadow-md max-[1200px]:relative max-[1200px]:top-0">
+          <h3 class="mb-4 text-base">
+            <i class="ph ph-export"></i> Export
+          </h3>
+          <div class="form-group mb-5">
+            <label class="form-label mb-[0.4rem] block text-[0.8rem] font-semibold text-slate-900">Format</label>
+            <select id="export-format" class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[0.95rem] text-slate-900 transition-colors focus:border-indigo-600 focus:outline-none focus:ring-[3px] focus:ring-indigo-100">
+              <option value="png">PNG</option>
+              <option value="jpeg">JPEG</option>
+              <option value="webp">WebP</option>
+              <option value="svg">SVG</option>
+            </select>
+          </div>
+          <div class="slider-group mb-5">
+            <div class="slider-header mb-[0.4rem] flex justify-between text-[0.8rem] font-medium [&_span:last-child]:tabular-nums [&_span:last-child]:text-slate-500">
+              <span>Size</span><span id="export-size-val">1024px</span>
+            </div>
+            <input
+              type="range"
+              id="export-size"
+              min="300"
+              max="4000"
+              step="100"
+              value="1024" class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" / class="h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]">
+          </div>
+          <button
+            class="btn-secondary inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50 mt-3 cursor-pointer duration-[180ms]"
+            id="btn-randomize"
+            type="button"
+          >
+            <i class="ph ph-shuffle"></i> Random design
+          </button>
+          <button
+            class="btn-primary inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white transition-all hover:-translate-y-px hover:bg-indigo-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none w-full mt-3 p-[0.9rem] text-base cursor-pointer duration-[180ms]"
+            id="btn-download"
+          >
+            <i class="ph ph-download-simple"></i> Download
+          </button>
+          <button
+            class="btn-secondary inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50 mt-3 cursor-pointer duration-[180ms]"
+            id="btn-copy-qr"
+            type="button"
+          >
+            <i class="ph ph-copy"></i> Copy QR image
+          </button>
+          <button
+            class="btn-secondary inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50 w-full mt-3 cursor-pointer duration-[180ms]"
+            id="btn-reset"
+          >
+            <i class="ph ph-arrow-counter-clockwise"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay pointer-events-none fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/50 p-4 opacity-0 backdrop-blur-sm transition-opacity [&.open]:pointer-events-auto [&.open]:opacity-100" id="modal-overlay">
+      <div class="modal w-full max-w-[420px] scale-[0.95] rounded-2xl bg-white p-6 shadow-xl transition-transform [.open_&]:scale-100" role="dialog" aria-modal="true">
+        <div class="modal-header mb-3 flex items-center gap-3">
+          <div class="modal-icon flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full [&_i]:text-[1.4rem] [&.danger]:bg-red-100 [&.danger]:text-red-500 [&.info]:bg-indigo-100 [&.info]:text-indigo-600 [&.success]:bg-emerald-100 [&.success]:text-emerald-500 [&.warning]:bg-amber-100 [&.warning]:text-amber-600" id="modal-icon">
+            <i class="ph-fill ph-info"></i>
+          </div>
+          <div class="modal-title text-[1.05rem] font-bold" id="modal-title">Title</div>
+        </div>
+        <div class="modal-body mb-6 text-sm leading-normal text-slate-500" id="modal-body">Message</div>
+        <div class="modal-actions flex justify-end gap-2 [&>button]:px-[1.1rem] [&>button]:py-[0.6rem] [&>button]:text-sm">
+          <button class="btn-secondary inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition-all hover:border-slate-300 hover:bg-slate-50 cursor-pointer duration-[180ms]" id="modal-cancel">Cancel</button>
+          <button class="btn-primary inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white transition-all hover:-translate-y-px hover:bg-indigo-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none cursor-pointer duration-[180ms] [&.danger]:bg-red-500 [&.danger:hover]:bg-red-600" id="modal-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container fixed right-6 top-20 z-[1100] flex flex-col gap-2 pointer-events-none [&_.toast]:pointer-events-auto [&_.toast]:flex [&_.toast]:max-w-[340px] [&_.toast]:translate-x-[120%] [&_.toast]:items-center [&_.toast]:gap-[0.6rem] [&_.toast]:rounded-xl [&_.toast]:border [&_.toast]:border-slate-200 [&_.toast]:bg-white [&_.toast]:px-4 [&_.toast]:py-3 [&_.toast]:text-[0.85rem] [&_.toast]:font-medium [&_.toast]:shadow-lg [&_.toast]:transition-transform [&_.toast.show]:translate-x-0 [&_.toast_i]:shrink-0 [&_.toast_i]:text-xl [&_.toast.success_i]:text-emerald-500 [&_.toast.error_i]:text-red-500 [&_.toast.info_i]:text-indigo-600" id="toast-container"></div>
+
+    <script>
+      /* ════════════════════════════════════════════════════════════════════
+   MODAL + TOAST
+   ════════════════════════════════════════════════════════════════════ */
+      const Modal = {
+        overlay: document.getElementById("modal-overlay"),
+        confirmCb: null,
+        show({
+          title,
+          body,
+          type = "info",
+          confirmText = "Confirm",
+          cancelText = "Cancel",
+          onConfirm,
+          hideCancel = false,
+        }) {
+          const icons = {
+            info: "ph-info",
+            danger: "ph-warning",
+            success: "ph-check-circle",
+            warning: "ph-warning",
+          };
+          const iconEl = document.getElementById("modal-icon");
+          iconEl.classList.remove("danger", "info", "success", "warning");
+          iconEl.classList.add(type);
+          iconEl.innerHTML = `<i class="ph-fill ${icons[type] || "ph-info"}"></i>`;
+          document.getElementById("modal-title").textContent = title;
+          document.getElementById("modal-body").textContent = body || "";
+          const confirmBtn = document.getElementById("modal-confirm");
+          const cancelBtn = document.getElementById("modal-cancel");
+          confirmBtn.textContent = confirmText;
+          cancelBtn.textContent = cancelText;
+          cancelBtn.classList.toggle("hidden", hideCancel);
+          confirmBtn.classList.toggle("danger", type === "danger");
+          this.confirmCb = onConfirm;
+          this.overlay.classList.add("open");
+        },
+        hide() {
+          this.overlay.classList.remove("open");
+          document.getElementById("modal-confirm").classList.remove("danger");
+          this.confirmCb = null;
+        },
+      };
+      document.getElementById("modal-confirm").addEventListener("click", () => {
+        const cb = Modal.confirmCb;
+        Modal.hide();
+        if (cb) cb();
+      });
+      document
+        .getElementById("modal-cancel")
+        .addEventListener("click", () => Modal.hide());
+      Modal.overlay.addEventListener("click", (e) => {
+        if (e.target === Modal.overlay) Modal.hide();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && Modal.overlay.classList.contains("open"))
+          Modal.hide();
+      });
+
+      const Toast = {
+        container: document.getElementById("toast-container"),
+        show(message, type = "info") {
+          const icons = {
+            success: "ph-check-circle",
+            error: "ph-x-circle",
+            info: "ph-info",
+          };
+          const el = document.createElement("div");
+          el.className = `toast ${type}`;
+          el.innerHTML = `<i class="ph-fill ${icons[type] || "ph-info"}"></i><span></span>`;
+          // Safe text insertion (no HTML injection)
+          el.querySelector("span").textContent = message;
+          this.container.appendChild(el);
+          requestAnimationFrame(() => el.classList.add("show"));
+          setTimeout(() => {
+            el.classList.remove("show");
+            setTimeout(() => el.remove(), 300);
+          }, 3000);
+        },
+      };
+
+      /* ════════════════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════════════════ */
+      const DEFAULT_GRADIENT = {
+        enabled: false,
+        type: "linear",
+        rotation: 0,
+        colorStops: [
+          { offset: 0, color: "#4f46e5" },
+          { offset: 1, color: "#ec4899" },
+        ],
+      };
+
+      const RANDOM_DESIGN_PALETTES = [
+        { dots: "#111827", background: "#f8fafc", accent: "#4f46e5" },
+        { dots: "#102a43", background: "#f0f9ff", accent: "#0369a1" },
+        { dots: "#163020", background: "#f0fdf4", accent: "#16a34a" },
+        { dots: "#3b1d2a", background: "#fff1f2", accent: "#e11d48" },
+        { dots: "#2f2557", background: "#f5f3ff", accent: "#7c3aed" },
+        { dots: "#422006", background: "#fffbeb", accent: "#d97706" },
+      ];
+
+      const State = {
+        contentType: "url",
+        solidColors: {
+          dots: "#0f172a",
+          bg: "#ffffff",
+          cornerSq: "#0f172a",
+          cornerDot: "#0f172a",
+        },
+        qrOptions: {
+          width: 1024,
+          height: 1024,
+          type: "canvas",
+          shape: "square",
+          data: "https://qrcraft.dev",
+          margin: 90,
+          qrOptions: { typeNumber: 0, mode: "Byte", errorCorrectionLevel: "M" },
+          imageOptions: {
+            hideBackgroundDots: true,
+            imageSize: 0.4,
+            margin: 5,
+            crossOrigin: "anonymous",
+            saveAsBlob: false,
+          },
+          dotsOptions: { type: "square", color: "#0f172a", roundSize: true },
+          backgroundOptions: { color: "#ffffff" },
+          image: "",
+          cornersSquareOptions: { type: "square", color: "#0f172a" },
+          cornersDotOptions: { type: "square", color: "#0f172a" },
+        },
+        gradients: {
+          dots: JSON.parse(JSON.stringify(DEFAULT_GRADIENT)),
+          bg: JSON.parse(
+            JSON.stringify({
+              ...DEFAULT_GRADIENT,
+              colorStops: [
+                { offset: 0, color: "#f8fafc" },
+                { offset: 1, color: "#e0e7ff" },
+              ],
+            }),
+          ),
+          corner: JSON.parse(
+            JSON.stringify({
+              ...DEFAULT_GRADIENT,
+              colorStops: [
+                { offset: 0, color: "#0f172a" },
+                { offset: 1, color: "#4f46e5" },
+              ],
+            }),
+          ),
+        },
+        transparentBg: false,
+      };
+
+      const qrEngine = new QRCodeStyling(State.qrOptions);
+      const DOM = { canvas: document.getElementById("live-preview-canvas") };
+
+      /* ════════════════════════════════════════════════════════════════════
+   UTILS
+   ════════════════════════════════════════════════════════════════════ */
+      const U = {
+        debounce: (fn, wait) => {
+          let t;
+          return (...a) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...a), wait);
+          };
+        },
+        buildEmail: (em, sub, body) =>
+          em
+            ? `mailto:${em}?subject=${encodeURIComponent(sub || "")}&body=${encodeURIComponent(body || "")}`
+            : "https://qrcraft.dev",
+        buildSms: (ph, msg) =>
+          ph ? `SMSTO:${ph}:${msg || ""}` : "https://qrcraft.dev",
+        buildWiFi: (s, p, e) =>
+          s ? `WIFI:T:${e};S:${s};P:${p};;` : "https://qrcraft.dev",
+        buildVCard: (n, ph, em, c) =>
+          n
+            ? `BEGIN:VCARD\nVERSION:3.0\nN:${n};${n}\nFN:${n}\nORG:${c}\nTEL;TYPE=cell:${ph}\nEMAIL:${em}\nEND:VCARD`
+            : "https://qrcraft.dev",
+        buildGeo: (lat, lng) => `geo:${lat},${lng}`,
+        buildEvent: (t, l, s, e) =>
+          `BEGIN:VEVENT\nSUMMARY:${t}\nLOCATION:${l}\nDTSTART:${s}\nDTEND:${e}\nEND:VEVENT`,
+        buildWhatsApp: (ph, msg) =>
+          ph
+            ? `https://wa.me/${ph.replace(/[^\d]/g, "")}${msg ? `?text=${encodeURIComponent(msg)}` : ""}`
+            : "https://qrcraft.dev",
+        buildTelegram: (u) =>
+          u ? `https://t.me/${u.replace(/^@/, "")}` : "https://qrcraft.dev",
+        buildBitcoin: (addr, amt, label) => {
+          if (!addr) return "https://qrcraft.dev";
+          let s = `bitcoin:${addr}`;
+          const params = [];
+          if (amt) params.push(`amount=${amt}`);
+          if (label) params.push(`label=${encodeURIComponent(label)}`);
+          return params.length ? `${s}?${params.join("&")}` : s;
+        },
+        buildOtp: (secret, issuer, account) => {
+          if (!secret) return "https://qrcraft.dev";
+          const label =
+            issuer && account
+              ? `${encodeURIComponent(issuer)}:${encodeURIComponent(account)}`
+              : encodeURIComponent(account || issuer || "Account");
+          return `otpauth://totp/${label}?secret=${secret}${issuer ? `&issuer=${encodeURIComponent(issuer)}` : ""}`;
+        },
+        // Bug fix #10: FaceTime URI. Apple documents `facetime:` (no slashes) for both addresses and numbers.
+        buildFaceTime: (a) => (a ? `facetime:${a}` : "https://qrcraft.dev"),
+        buildMecard: (n, ph, em, org) => {
+          if (!n) return "https://qrcraft.dev";
+          return `MECARD:N:${n};TEL:${ph};EMAIL:${em};ORG:${org};;`;
+        },
+        toLibGradient: (g) => ({
+          type: g.type,
+          rotation: g.rotation,
+          colorStops: g.colorStops.map((s) => ({
+            offset: s.offset,
+            color: s.color,
+          })),
+        }),
+      };
+
+      /* ════════════════════════════════════════════════════════════════════
+   COLOR APPLICATION
+   ════════════════════════════════════════════════════════════════════ */
+      function applyColorsToQR() {
+        const d = State.qrOptions.dotsOptions;
+        const b = State.qrOptions.backgroundOptions;
+        const cs = State.qrOptions.cornersSquareOptions;
+        const cd = State.qrOptions.cornersDotOptions;
+
+        // Explicit nulls clear stale nested gradient options in the library's shallow update.
+        d.gradient = null;
+        b.gradient = null;
+        cs.gradient = null;
+        cd.gradient = null;
+
+        if (State.gradients.dots.enabled) {
+          d.gradient = U.toLibGradient(State.gradients.dots);
+          delete d.color;
+        } else {
+          d.color = State.solidColors.dots;
+        }
+
+        if (State.transparentBg) {
+          b.color = "transparent";
+        } else if (State.gradients.bg.enabled) {
+          b.gradient = U.toLibGradient(State.gradients.bg);
+          delete b.color;
+        } else {
+          b.color = State.solidColors.bg;
+        }
+
+        if (State.gradients.corner.enabled) {
+          const g = U.toLibGradient(State.gradients.corner);
+          cs.gradient = { ...g };
+          cd.gradient = { ...g };
+          delete cs.color;
+          delete cd.color;
+        } else {
+          cs.color = State.solidColors.cornerSq;
+          cd.color = State.solidColors.cornerDot;
+        }
+        // NOTE: no DOM sync here — bug fix #2. UI is synced explicitly after state transitions.
+      }
+
+      /** Explicitly sync the solid color inputs from State. Call only after intentional state transitions. */
+      function syncSolidInputsFromState() {
+        const map = {
+          "color-fg": "dots",
+          "color-bg": "bg",
+          "color-corner-sq": "cornerSq",
+          "color-corner-dt": "cornerDot",
+        };
+        for (const [id, key] of Object.entries(map)) {
+          const inp = document.getElementById(id);
+          if (inp) inp.value = State.solidColors[key];
+          const txt = document.getElementById(id + "-text");
+          if (txt) txt.value = State.solidColors[key];
+        }
+      }
+
+      /* ════════════════════════════════════════════════════════════════════
+   RENDERER
+   ════════════════════════════════════════════════════════════════════ */
+      const Renderer = {
+        async updateCanvas(forDownload = false, overrideSize = null) {
+          try {
+            applyColorsToQR();
+            const baseSize =
+              overrideSize ||
+              (forDownload
+                ? parseInt(document.getElementById("export-size").value)
+                : State.qrOptions.width);
+            State.qrOptions.width = baseSize;
+            State.qrOptions.height = baseSize;
+            qrEngine.update({
+              ...State.qrOptions,
+              imageOptions: {
+                ...State.qrOptions.imageOptions,
+                saveAsBlob: true,
+              },
+            });
+
+            // Bug fix #5: wrap getRawData in try so logo decode errors surface as a toast, not a silent blank canvas
+            let blob;
+            try {
+              blob = await qrEngine.getRawData("png");
+            } catch (err) {
+              console.error("QR generation failed:", err);
+              Toast.show(
+                "QR rendering failed — try removing the logo or reducing its size.",
+                "error",
+              );
+              return null;
+            }
+            const img = new Image();
+            const url = URL.createObjectURL(blob);
+            img.src = url;
+            await new Promise((res, rej) => {
+              img.onload = res;
+              img.onerror = rej;
+            });
+            URL.revokeObjectURL(url);
+
+            const target = forDownload
+              ? document.createElement("canvas")
+              : DOM.canvas;
+            target.width = baseSize;
+            target.height = baseSize;
+            const ctx = target.getContext("2d");
+            ctx.clearRect(0, 0, baseSize, baseSize);
+            ctx.drawImage(img, 0, 0, baseSize, baseSize);
+            return target;
+          } catch (e) {
+            console.error("Render error:", e);
+            return null;
+          }
+        },
+        async triggerDownload() {
+          const fmt = document.getElementById("export-format").value;
+          const size = parseInt(document.getElementById("export-size").value);
+          if (fmt === "svg") {
+            applyColorsToQR();
+            State.qrOptions.width = size;
+            State.qrOptions.height = size;
+            const prevType = State.qrOptions.type;
+            State.qrOptions.type = "svg";
+            qrEngine.update(State.qrOptions);
+            await qrEngine.download({
+              extension: "svg",
+              name: "qrcraft-design",
+            });
+            State.qrOptions.type = prevType;
+            qrEngine.update(State.qrOptions);
+            return;
+          }
+          const ext = fmt === "jpeg" ? "jpeg" : fmt === "webp" ? "webp" : "png";
+          const canvas = await Renderer.updateCanvas(true, size);
+          if (!canvas) throw new Error("render-failed");
+          const link = document.createElement("a");
+          link.download = `qrcraft-design.${ext}`;
+          link.href = canvas.toDataURL(`image/${ext}`, 1.0);
+          link.click();
+        },
+        async copyToClipboard() {
+          if (
+            !window.isSecureContext ||
+            !navigator.clipboard?.write ||
+            !window.ClipboardItem
+          ) {
+            throw new Error(
+              "Clipboard image access is unavailable. Open QRCraft in a secure browser context and allow clipboard access.",
+            );
+          }
+          const canvas = await Renderer.updateCanvas();
+          if (!canvas) throw new Error("Could not render the QR image.");
+          const blob = await new Promise((resolve, reject) => {
+            canvas.toBlob((result) => {
+              if (result) resolve(result);
+              else reject(new Error("Could not encode the QR image."));
+            }, "image/png");
+          });
+          await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob }),
+          ]);
+        },
+      };
+
+      const updateLivePreview = U.debounce(() => Renderer.updateCanvas(), 120);
+
+      /* ════════════════════════════════════════════════════════════════════
+   GRADIENT UI
+   ════════════════════════════════════════════════════════════════════ */
+      function renderGradientStops(prefix) {
+        const container = document.getElementById(`grad-${prefix}-stops`);
+        const grad = State.gradients[prefix];
+        container.innerHTML = "";
+        grad.colorStops.forEach((stop, idx) => {
+          const row = document.createElement("div");
+          row.className = "gradient-stop";
+          row.innerHTML = `
+            <input type="color" class="stop-color" value="${stop.color}">
+            <input type="range" class="stop-offset h-[6px] w-full appearance-none rounded-[3px] border-0 bg-slate-200 p-0 outline-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-indigo-600 [&::-webkit-slider-thumb]:shadow-[0_0_0_3px_rgba(79,70,229,0.15)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb:hover]:shadow-[0_0_0_5px_rgba(79,70,229,0.2)]" min="0" max="1" step="0.01" value="${stop.offset}">
+            <span class="stop-label">${Math.round(stop.offset * 100)}%</span>
+            ${grad.colorStops.length > 2 ? '<button class="btn-mini btn-mini-icon stop-remove" title="Remove"><i class="ph ph-x"></i></button>' : ""}
+        `;
+          row.querySelector(".stop-color").addEventListener("input", (e) => {
+            State.gradients[prefix].colorStops[idx].color = e.target.value;
+            updateGradientPreview(prefix);
+            updateLivePreview();
+          });
+          row.querySelector(".stop-offset").addEventListener("input", (e) => {
+            State.gradients[prefix].colorStops[idx].offset = parseFloat(
+              e.target.value,
+            );
+            row.querySelector(".stop-label").textContent =
+              Math.round(e.target.value * 100) + "%";
+            updateGradientPreview(prefix);
+            updateLivePreview();
+          });
+          const rm = row.querySelector(".stop-remove");
+          if (rm)
+            rm.addEventListener("click", () => {
+              State.gradients[prefix].colorStops.splice(idx, 1);
+              renderGradientStops(prefix);
+              updateGradientPreview(prefix);
+              updateLivePreview();
+            });
+          container.appendChild(row);
+        });
+      }
+
+      function updateGradientPreview(prefix) {
+        const g = State.gradients[prefix];
+        const el = document.getElementById(`grad-${prefix}-preview`);
+        if (!g.enabled) {
+          el.classList.forEach((name) => {
+            if (name.startsWith("bg-[")) el.classList.remove(name);
+          });
+          el.classList.add(
+            "bg-[repeating-linear-gradient(45deg,#e2e8f0,#e2e8f0_4px,#fff_4px,#fff_8px)]",
+          );
+          return;
+        }
+        const deg = ((g.rotation * 180) / Math.PI).toFixed(0);
+        const stops = [...g.colorStops]
+          .sort((a, b) => a.offset - b.offset)
+          .map((s) => `${s.color} ${Math.round(s.offset * 100)}%`)
+          .join(", ");
+        const background =
+          g.type === "radial"
+            ? `radial-gradient(circle, ${stops})`
+            : `linear-gradient(${deg}deg, ${stops})`;
+        el.classList.forEach((name) => {
+          if (name.startsWith("bg-[")) el.classList.remove(name);
+        });
+        el.classList.add(`bg-[${background.replaceAll(" ", "_")}]`);
+      }
+
+      function setColorSubview(subtab) {
+        document
+          .querySelectorAll("#color-subtabs .sub-tab")
+          .forEach((tab) =>
+            tab.classList.toggle("active", tab.dataset.subtab === subtab),
+          );
+        document.querySelectorAll(".color-subview").forEach((view) => {
+          view.classList.toggle("hidden", view.id !== `color-${subtab}`);
+        });
+      }
+
+      function bindGradientSection(prefix) {
+        const enable = document.getElementById(`grad-${prefix}-enabled`);
+        const type = document.getElementById(`grad-${prefix}-type`);
+        const rotation = document.getElementById(`grad-${prefix}-rotation`);
+        const rotLabel = document.getElementById(`grad-${prefix}-rot-label`);
+        const addBtn = document.getElementById(`grad-${prefix}-add`);
+
+        enable.addEventListener("change", (e) => {
+          State.gradients[prefix].enabled = e.target.checked;
+          if (!e.target.checked) {
+            syncSolidInputsFromState();
+            setColorSubview("solid");
+            Toast.show(
+              `${prefix === "bg" ? "Background" : prefix === "corner" ? "Corner" : "Dots"} gradient disabled — using solid colors`,
+              "info",
+            );
+          }
+          updateGradientPreview(prefix);
+          updateLivePreview();
+        });
+        type.addEventListener("change", (e) => {
+          State.gradients[prefix].type = e.target.value;
+          updateGradientPreview(prefix);
+          updateLivePreview();
+        });
+        rotation.addEventListener("input", (e) => {
+          State.gradients[prefix].rotation = parseFloat(e.target.value);
+          rotLabel.textContent =
+            Math.round((e.target.value * 180) / Math.PI) + "°";
+          updateGradientPreview(prefix);
+          updateLivePreview();
+        });
+        addBtn.addEventListener("click", () => {
+          if (State.gradients[prefix].colorStops.length >= 5) {
+            Toast.show("Maximum 5 stops per gradient", "error");
+            return;
+          }
+          State.gradients[prefix].colorStops.push({
+            offset: 0.5,
+            color: "#ffffff",
+          });
+          renderGradientStops(prefix);
+          updateGradientPreview(prefix);
+          updateLivePreview();
+        });
+
+        enable.checked = State.gradients[prefix].enabled;
+        type.value = State.gradients[prefix].type;
+        rotation.value = State.gradients[prefix].rotation;
+        rotLabel.textContent =
+          Math.round((State.gradients[prefix].rotation * 180) / Math.PI) + "°";
+        renderGradientStops(prefix);
+        updateGradientPreview(prefix);
+      }
+
+      /* ════════════════════════════════════════════════════════════════════
+   TEMPLATES
+   ════════════════════════════════════════════════════════════════════ */
+const PRELOADED_LOGOS = [
+  // Social media & communities
+  { name: "GitHub", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/github.png" },
+  { name: "YouTube", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/youtube.png" },
+  { name: "Instagram", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/instagram.png" },
+  { name: "Facebook", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/facebook.png" },
+  { name: "X", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/x.png" },
+  { name: "TikTok", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tiktok.png" },
+  { name: "LinkedIn", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/linkedin.png" },
+  { name: "Reddit", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/reddit.png" },
+  { name: "Pinterest", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/pinterest.png" },
+  { name: "Snapchat", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/snapchat.png" },
+  { name: "Threads", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/threads.png" },
+  { name: "Bluesky", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/bluesky.png" },
+  { name: "Mastodon", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/mastodon.png" },
+  { name: "Tumblr", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tumblr.png" },
+  { name: "Twitch", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/twitch.png" },
+  { name: "Discord", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/discord.png" },
+  { name: "Telegram", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/telegram.png" },
+
+  // Messaging & communication
+  { name: "WhatsApp", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/whatsapp.png" },
+ 
+  { name: "Messenger", url: "https://cdn-icons-png.flaticon.com/512/3814/3814521.png" },
+  { name: "Signal", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/signal.png" },
+  { name: "Skype", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/skype.png" },
+  { name: "Zoom", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/zoom.png" },
+
+  { name: "Slack", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/slack.png" },
+
+  // Email & Google services
+  { name: "Gmail", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/gmail.png" },
+  { name: "Google", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google.png" },
+  { name: "Google Drive", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-drive.png" },
+  { name: "Google Photos", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-photos.png" },
+  { name: "Google Calendar", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-calendar.png" },
+  { name: "Google Maps", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-maps.png" },
+
+
+  // Music & entertainment
+  { name: "Spotify", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/spotify.png" },
+  { name: "Apple Music", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/apple-music.png" },
+  { name: "SoundCloud", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/soundcloud.png" },
+  { name: "Netflix", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/netflix.png" },
+  { name: "Prime Video", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/prime-video.png" },
+  { name: "Steam", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/steam.png" },
+
+  // Developer & design platforms
+  { name: "GitLab", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/gitlab.png" },
+
+
+  { name: "Figma", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/figma.png" },
+
+  { name: "Behance", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/behance.png" },
+
+  { name: "Notion", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/notion.png" },
+
+  // Cloud storage & productivity
+  { name: "Dropbox", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/dropbox.png" },
+
+
+  { name: "Apple", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/apple.png" },
+  { name: "Chrome", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/chrome.png" },
+
+  // Payments & business
+  { name: "PayPal", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/paypal.png" },
+  { name: "Stripe", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/stripe.png" },
+  { name: "Patreon", url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/patreon.png" },
+
+  // Generic QR destinations & contact icons
+  { name: "Phone", url: "https://cdn-icons-png.flaticon.com/512/5585/5585856.png" },
+  { name: "Maps", url: "https://cdn-icons-png.flaticon.com/512/2642/2642502.png" },
+  { name: "Website", url: "https://cdn-icons-png.flaticon.com/512/8034/8034787.png" },
+  { name: "mail", url: "https://cdn-icons-png.flaticon.com/512/6244/6244710.png" },
+  { name: "heart", url: "https://cdn-icons-png.flaticon.com/512/3670/3670159.png" },
+];
+
+      const TemplatesData = [
+        {
+          name: "Classic",
+          opts: {
+            dotsOptions: { type: "square", color: "#000" },
+            backgroundOptions: { color: "#fff" },
+            cornersSquareOptions: { type: "square", color: "#000" },
+            cornersDotOptions: { type: "square", color: "#000" },
+          },
+        },
+        {
+          name: "Modern Blue",
+          opts: {
+            dotsOptions: { type: "rounded", color: "#2563eb" },
+            backgroundOptions: { color: "#fff" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#1e40af" },
+            cornersDotOptions: { type: "dot", color: "#1e40af" },
+          },
+        },
+        {
+          name: "Sunset",
+          opts: {
+            dotsOptions: { type: "classy", color: "#ea580c" },
+            backgroundOptions: { color: "#fff7ed" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#c2410c" },
+            cornersDotOptions: { type: "square", color: "#ea580c" },
+          },
+        },
+        {
+          name: "Gold",
+          opts: {
+            dotsOptions: { type: "classy-rounded", color: "#b45309" },
+            backgroundOptions: { color: "#fff" },
+            cornersSquareOptions: { type: "dot", color: "#92400e" },
+            cornersDotOptions: { type: "dot", color: "#92400e" },
+          },
+        },
+        {
+          name: "Neon Cyber",
+          opts: {
+            dotsOptions: { type: "dots", color: "#06b6d4" },
+            backgroundOptions: { color: "#0f172a" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#ec4899" },
+            cornersDotOptions: { type: "dot", color: "#06b6d4" },
+          },
+        },
+        {
+          name: "Green Leaf",
+          opts: {
+            dotsOptions: { type: "rounded", color: "#16a34a" },
+            backgroundOptions: { color: "#f0fdf4" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#15803d" },
+            cornersDotOptions: { type: "dot", color: "#16a34a" },
+          },
+        },
+        {
+          name: "Minimal",
+          opts: {
+            dotsOptions: { type: "dots", color: "#334155" },
+            backgroundOptions: { color: "#fff" },
+            cornersSquareOptions: { type: "dot", color: "#0f172a" },
+            cornersDotOptions: { type: "dot", color: "#0f172a" },
+          },
+        },
+        {
+          name: "Purple Pop",
+          opts: {
+            dotsOptions: { type: "classy", color: "#9333ea" },
+            backgroundOptions: { color: "#faf5ff" },
+            cornersSquareOptions: { type: "square", color: "#7e22ce" },
+            cornersDotOptions: { type: "square", color: "#9333ea" },
+          },
+        },
+        {
+          name: "Dark Mode",
+          opts: {
+            dotsOptions: { type: "rounded", color: "#f8fafc" },
+            backgroundOptions: { color: "#1e293b" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#e2e8f0" },
+            cornersDotOptions: { type: "dot", color: "#f8fafc" },
+          },
+        },
+        {
+          name: "Red Alert",
+          opts: {
+            dotsOptions: { type: "square", color: "#dc2626" },
+            backgroundOptions: { color: "#fef2f2" },
+            cornersSquareOptions: { type: "square", color: "#991b1b" },
+            cornersDotOptions: { type: "square", color: "#dc2626" },
+          },
+        },
+        {
+          name: "Soft Pink",
+          opts: {
+            dotsOptions: { type: "classy-rounded", color: "#db2777" },
+            backgroundOptions: { color: "#fdf2f8" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#be185d" },
+            cornersDotOptions: { type: "dot", color: "#db2777" },
+          },
+        },
+        {
+          name: "Tech",
+          opts: {
+            dotsOptions: { type: "square", color: "#0284c7" },
+            backgroundOptions: { color: "#e0f2fe" },
+            cornersSquareOptions: { type: "square", color: "#0369a1" },
+            cornersDotOptions: { type: "square", color: "#0284c7" },
+          },
+        },
+        {
+          name: "Gradient Dots",
+          opts: {
+            dotsOptions: {
+              type: "rounded",
+              gradient: {
+                type: "linear",
+                rotation: 0,
+                colorStops: [
+                  { offset: 0, color: "#4f46e5" },
+                  { offset: 1, color: "#ec4899" },
+                ],
+              },
+            },
+            backgroundOptions: { color: "#fff" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#4f46e5" },
+            cornersDotOptions: { type: "dot", color: "#ec4899" },
+          },
+        },
+        {
+          name: "Gradient BG",
+          opts: {
+            dotsOptions: { type: "square", color: "#0f172a" },
+            backgroundOptions: {
+              gradient: {
+                type: "linear",
+                rotation: 0,
+                colorStops: [
+                  { offset: 0, color: "#f8fafc" },
+                  { offset: 1, color: "#c7d2fe" },
+                ],
+              },
+            },
+            cornersSquareOptions: { type: "square", color: "#0f172a" },
+            cornersDotOptions: { type: "square", color: "#0f172a" },
+          },
+        },
+        {
+          name: "Sunset Gradient",
+          opts: {
+            dotsOptions: {
+              type: "classy-rounded",
+              gradient: {
+                type: "radial",
+                rotation: 0,
+                colorStops: [
+                  { offset: 0, color: "#f59e0b" },
+                  { offset: 1, color: "#ec4899" },
+                ],
+              },
+            },
+            backgroundOptions: {
+              gradient: {
+                type: "linear",
+                rotation: 0,
+                colorStops: [
+                  { offset: 0, color: "#fff7ed" },
+                  { offset: 1, color: "#fce7f3" },
+                ],
+              },
+            },
+            cornersSquareOptions: { type: "extra-rounded", color: "#f59e0b" },
+            cornersDotOptions: { type: "dot", color: "#ec4899" },
+          },
+        },
+        {
+          name: "Ocean",
+          opts: {
+            dotsOptions: {
+              type: "rounded",
+              gradient: {
+                type: "linear",
+                rotation: 0.785,
+                colorStops: [
+                  { offset: 0, color: "#06b6d4" },
+                  { offset: 1, color: "#3b82f6" },
+                ],
+              },
+            },
+            backgroundOptions: { color: "#ecfeff" },
+            cornersSquareOptions: { type: "extra-rounded", color: "#0891b2" },
+            cornersDotOptions: { type: "dot", color: "#3b82f6" },
+          },
+        },
+        {
+          name: "Forest",
+          opts: {
+            dotsOptions: { type: "classy", color: "#15803d" },
+            backgroundOptions: {
+              gradient: {
+                type: "linear",
+                rotation: 1.57,
+                colorStops: [
+                  { offset: 0, color: "#f0fdf4" },
+                  { offset: 1, color: "#bbf7d0" },
+                ],
+              },
+            },
+            cornersSquareOptions: { type: "extra-rounded", color: "#166534" },
+            cornersDotOptions: { type: "dot", color: "#15803d" },
+          },
+        },
+      ];
+
+      /* ════════════════════════════════════════════════════════════════════
+   APP
+   ════════════════════════════════════════════════════════════════════ */
+      const App = {
+        // No-op stub so bindTabs can call it before bindTabScroll (bug fix #6)
+        updateTabScrollHints: () => {},
+
+        init() {
+          // Bug fix #6: bindTabScroll first so updateTabScrollHints exists
+          this.bindTabScroll();
+          this.bindTabs();
+          this.bindContent();
+          this.bindStyle();
+          this.bindColors();
+          this.bindGradients();
+          this.bindLogo();
+          this.bindLayout();
+          this.bindExport();
+          this.renderTemplates();
+          this.updateContent();
+          Toast.show("Welcome to QRCraft", "success");
+        },
+
+        bindTabs() {
+          document.querySelectorAll(".tab-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              document
+                .querySelectorAll(".tab-btn")
+                .forEach((b) => b.classList.remove("active"));
+              document
+                .querySelectorAll(".tab-content")
+                .forEach((c) => c.classList.remove("active"));
+              btn.classList.add("active");
+              document
+                .getElementById(`tab-${btn.dataset.tab}`)
+                .classList.add("active");
+              btn.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center",
+              });
+              this.updateTabScrollHints();
+            });
+          });
+          document
+            .querySelectorAll("#color-subtabs .sub-tab")
+            .forEach((tab) => {
+            tab.addEventListener("click", () => {
+              setColorSubview(tab.dataset.subtab);
+              if (tab.dataset.subtab === "solid") {
+                  let disabledGradient = false;
+                  Object.keys(State.gradients).forEach((key) => {
+                    if (!State.gradients[key].enabled) return;
+                    State.gradients[key].enabled = false;
+                    document.getElementById(`grad-${key}-enabled`).checked =
+                      false;
+                    updateGradientPreview(key);
+                    disabledGradient = true;
+                  });
+                  if (disabledGradient) {
+                    syncSolidInputsFromState();
+                    updateLivePreview();
+                    Toast.show("Switched to solid colors", "success");
+                  }
+                }
+              });
+            });
+        },
+
+        bindTabScroll() {
+          const wrap = document.getElementById("tab-scroll-wrap");
+          const tabs = document.getElementById("control-tabs");
+          const update = () => {
+            wrap.classList.toggle("can-scroll-left", tabs.scrollLeft > 4);
+            wrap.classList.toggle(
+              "can-scroll-right",
+              tabs.scrollLeft + tabs.clientWidth < tabs.scrollWidth - 4,
+            );
+          };
+          tabs.addEventListener("scroll", update);
+          window.addEventListener("resize", update);
+          tabs.addEventListener(
+            "wheel",
+            (e) => {
+              if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+                tabs.scrollLeft += e.deltaY;
+              }
+            },
+            { passive: false },
+          );
+          setTimeout(update, 50);
+          this.updateTabScrollHints = update;
+        },
+
+        updateContent() {
+          const t = State.contentType;
+          let d = "https://qrcraft.dev";
+          const v = (id) => document.getElementById(id)?.value || "";
+          if (t === "url") d = v("qr-url");
+          else if (t === "text") d = v("qr-text");
+          else if (t === "email")
+            d = U.buildEmail(
+              v("qr-email"),
+              v("qr-email-sub"),
+              v("qr-email-body"),
+            );
+          else if (t === "phone")
+            d = v("qr-phone") ? `tel:${v("qr-phone")}` : "https://qrcraft.dev";
+          else if (t === "sms")
+            d = U.buildSms(v("qr-sms-phone"), v("qr-sms-msg"));
+          else if (t === "wifi")
+            d = U.buildWiFi(
+              v("qr-wifi-ssid"),
+              v("qr-wifi-pass"),
+              v("qr-wifi-type"),
+            );
+          else if (t === "vcard")
+            d = U.buildVCard(
+              v("qr-vcard-name"),
+              v("qr-vcard-phone"),
+              v("qr-vcard-email"),
+              v("qr-vcard-company"),
+            );
+          else if (t === "geo")
+            d = U.buildGeo(v("qr-geo-lat"), v("qr-geo-lng"));
+          else if (t === "event")
+            d = U.buildEvent(
+              v("qr-event-title"),
+              v("qr-event-loc"),
+              v("qr-event-start"),
+              v("qr-event-end"),
+            );
+          else if (t === "whatsapp")
+            d = U.buildWhatsApp(v("qr-wa-phone"), v("qr-wa-msg"));
+          else if (t === "telegram") d = U.buildTelegram(v("qr-tg-user"));
+          else if (t === "bitcoin")
+            d = U.buildBitcoin(
+              v("qr-btc-address"),
+              v("qr-btc-amount"),
+              v("qr-btc-label"),
+            );
+          else if (t === "otp")
+            d = U.buildOtp(
+              v("qr-otp-secret"),
+              v("qr-otp-issuer"),
+              v("qr-otp-account"),
+            );
+          else if (t === "facetime") d = U.buildFaceTime(v("qr-facetime"));
+          else if (t === "mecard")
+            d = U.buildMecard(
+              v("qr-mecard-name"),
+              v("qr-mecard-phone"),
+              v("qr-mecard-email"),
+              v("qr-mecard-org"),
+            );
+          State.qrOptions.data = d || "https://qrcraft.dev";
+          updateLivePreview();
+        },
+
+        bindContent() {
+          document.querySelectorAll(".type-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              document
+                .querySelectorAll(".type-btn")
+                .forEach((b) => b.classList.remove("active"));
+              btn.classList.add("active");
+              State.contentType = btn.dataset.type;
+              document
+                .querySelectorAll(".dynamic-input")
+                .forEach((el) => el.classList.add("hidden"));
+              document
+                .getElementById(`input-${State.contentType}`)
+                .classList.remove("hidden");
+              this.updateContent();
+            });
+          });
+          const ids = [
+            "qr-url",
+            "qr-text",
+            "qr-email",
+            "qr-email-sub",
+            "qr-email-body",
+            "qr-phone",
+            "qr-sms-phone",
+            "qr-sms-msg",
+            "qr-wifi-ssid",
+            "qr-wifi-pass",
+            "qr-vcard-name",
+            "qr-vcard-phone",
+            "qr-vcard-email",
+            "qr-vcard-company",
+            "qr-geo-lat",
+            "qr-geo-lng",
+            "qr-event-title",
+            "qr-event-loc",
+            "qr-event-start",
+            "qr-event-end",
+            "qr-wa-phone",
+            "qr-wa-msg",
+            "qr-tg-user",
+            "qr-btc-address",
+            "qr-btc-amount",
+            "qr-btc-label",
+            "qr-otp-secret",
+            "qr-otp-issuer",
+            "qr-otp-account",
+            "qr-facetime",
+            "qr-mecard-name",
+            "qr-mecard-phone",
+            "qr-mecard-email",
+            "qr-mecard-org",
+          ];
+          ids.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el)
+              el.addEventListener(
+                "input",
+                U.debounce(() => this.updateContent(), 300),
+              );
+          });
+          const wifiType = document.getElementById("qr-wifi-type");
+          if (wifiType)
+            wifiType.addEventListener("change", () => this.updateContent());
+        },
+
+        bindStyle() {
+          const setupGrid = (gridId, target, prop) => {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            grid.querySelectorAll(".option-btn").forEach((btn) => {
+              btn.addEventListener("click", () => {
+                grid
+                  .querySelectorAll(".option-btn")
+                  .forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+                State.qrOptions[target][prop] = btn.dataset.val;
+                updateLivePreview();
+              });
+            });
+          };
+          setupGrid("pattern-options", "dotsOptions", "type");
+          setupGrid("corners-square-options", "cornersSquareOptions", "type");
+          setupGrid("corners-dot-options", "cornersDotOptions", "type");
+
+          document
+            .getElementById("qr-shape")
+            .addEventListener("change", (e) => {
+              State.qrOptions.shape = e.target.value;
+              updateLivePreview();
+            });
+          document.getElementById("qr-type").addEventListener("change", (e) => {
+            State.qrOptions.type = e.target.value;
+            updateLivePreview();
+          });
+          document
+            .getElementById("round-size")
+            .addEventListener("change", (e) => {
+              State.qrOptions.dotsOptions.roundSize = e.target.checked;
+              updateLivePreview();
+            });
+
+          const errSlider = document.getElementById("error-slider");
+          const errLevels = ["L", "M", "Q", "H"];
+          const errLabels = [
+            "Low (7%)",
+            "Medium (15%)",
+            "Quartile (25%)",
+            "High (30%)",
+          ];
+          errSlider.addEventListener("input", (e) => {
+            const v = parseInt(e.target.value);
+            document.getElementById("error-val").innerText = errLabels[v];
+            State.qrOptions.qrOptions.errorCorrectionLevel = errLevels[v];
+            updateLivePreview();
+          });
+        },
+
+        bindColors() {
+          // Bug fix: only wire inputs that actually exist. Corner text inputs don't exist in HTML.
+          const setup = (inpId, txtId, key) => {
+            const inp = document.getElementById(inpId);
+            if (!inp) return;
+            const txt = txtId ? document.getElementById(txtId) : null;
+            const onChange = (v) => {
+              State.solidColors[key] = v;
+              // Auto-disable conflicting gradient
+              if (key === "dots" && State.gradients.dots.enabled) {
+                State.gradients.dots.enabled = false;
+                document.getElementById("grad-dots-enabled").checked = false;
+                updateGradientPreview("dots");
+                Toast.show(
+                  "Dots gradient disabled — using solid color",
+                  "info",
+                );
+              }
+              if (key === "bg" && State.gradients.bg.enabled) {
+                State.gradients.bg.enabled = false;
+                document.getElementById("grad-bg-enabled").checked = false;
+                updateGradientPreview("bg");
+                Toast.show(
+                  "Background gradient disabled — using solid color",
+                  "info",
+                );
+              }
+              if (
+                (key === "cornerSq" || key === "cornerDot") &&
+                State.gradients.corner.enabled
+              ) {
+                State.gradients.corner.enabled = false;
+                document.getElementById("grad-corner-enabled").checked = false;
+                updateGradientPreview("corner");
+                Toast.show(
+                  "Corner gradient disabled — using solid color",
+                  "info",
+                );
+              }
+              updateLivePreview();
+            };
+            inp.addEventListener("input", (e) => {
+              if (txt) txt.value = e.target.value;
+              onChange(e.target.value);
+            });
+            if (txt)
+              txt.addEventListener("change", (e) => {
+                inp.value = e.target.value;
+                onChange(e.target.value);
+              });
+          };
+          setup("color-fg", "color-fg-text", "dots");
+          setup("color-bg", "color-bg-text", "bg");
+          setup("color-corner-sq", null, "cornerSq");
+          setup("color-corner-dt", null, "cornerDot");
+
+          document
+            .getElementById("bg-transparent")
+            .addEventListener("change", (e) => {
+              State.transparentBg = e.target.checked;
+              updateLivePreview();
+            });
+
+          document
+            .getElementById("btn-sync-colors")
+            .addEventListener("click", () => {
+              const c = State.solidColors.dots;
+              State.solidColors.cornerSq = c;
+              State.solidColors.cornerDot = c;
+              if (State.gradients.corner.enabled) {
+                State.gradients.corner.enabled = false;
+                document.getElementById("grad-corner-enabled").checked = false;
+                updateGradientPreview("corner");
+              }
+              syncSolidInputsFromState();
+              updateLivePreview();
+              Toast.show("Corners synced with foreground", "success");
+            });
+        },
+
+        bindGradients() {
+          bindGradientSection("dots");
+          bindGradientSection("bg");
+          bindGradientSection("corner");
+        },
+
+        bindLogo() {
+          const logoGrid = document.getElementById("preloaded-logos");
+          const removeLogoButton = document.getElementById("btn-remove-logo");
+          const searchResults = document.getElementById("logo-search-results");
+          const uploadInput = document.getElementById("logo-upload");
+          const dropZone = document.getElementById("logo-drop-zone");
+          const setLogo = (image, selectedButton = null) => {
+            State.qrOptions.image = image;
+            logoGrid
+              .querySelectorAll(".option-btn")
+              .forEach((item) => item.classList.remove("active"));
+            searchResults
+              .querySelectorAll("button")
+              .forEach((item) => item.classList.remove("active"));
+            if (selectedButton) selectedButton.classList.add("active");
+            uploadInput.value = "";
+            removeLogoButton.classList.remove("hidden");
+            updateLivePreview();
+          };
+
+          const loadLogoFile = (file) => {
+            const validTypes = [
+              "image/png",
+              "image/jpeg",
+              "image/webp",
+              "image/svg+xml",
+            ];
+            if (!validTypes.includes(file.type)) {
+              uploadInput.value = "";
+              Toast.show("Choose a PNG, JPEG, WebP, or SVG image", "error");
+              return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+              uploadInput.value = "";
+              Toast.show("Logo too large (max 2MB)", "error");
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              if (typeof event.target.result !== "string") {
+                Toast.show("Could not read logo file", "error");
+                return;
+              }
+              setLogo(event.target.result);
+              Toast.show("Logo uploaded", "success");
+            };
+            reader.onerror = () =>
+              Toast.show("Could not read logo file", "error");
+            reader.readAsDataURL(file);
+          };
+
+          PRELOADED_LOGOS.forEach(({ name, url }) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className =
+              "option-btn flex aspect-square items-center justify-center rounded-xl border border-slate-200 bg-white p-1 transition-colors hover:border-slate-300 hover:bg-slate-50 [&_img]:h-full [&_img]:w-full [&_img]:object-contain [&.active]:border-indigo-600 [&.active]:bg-indigo-100 cursor-pointer";
+            button.title = name;
+            button.setAttribute("aria-label", `Use ${name} logo`);
+            const image = document.createElement("img");
+            image.alt = name;
+            image.crossOrigin = "anonymous";
+            image.addEventListener(
+              "error",
+              () =>
+                Toast.show(
+                  `Could not load "${name}". Check the PNG URL and its CORS settings.`,
+                  "error",
+                ),
+              { once: true },
+            );
+            image.src = url;
+            button.appendChild(image);
+            button.addEventListener("click", () => {
+              logoGrid
+                .querySelectorAll(".option-btn")
+                .forEach((item) => item.classList.remove("active"));
+              button.classList.add("active");
+              setLogo(url, button);
+            });
+            logoGrid.appendChild(button);
+          });
+          uploadInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (file) loadLogoFile(file);
+          });
+          ["dragenter", "dragover"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+              event.preventDefault();
+              dropZone.classList.add("dragging");
+            });
+          });
+          ["dragleave", "drop"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+              event.preventDefault();
+              dropZone.classList.remove("dragging");
+            });
+          });
+          dropZone.addEventListener("drop", (event) => {
+            const file = event.dataTransfer.files[0];
+            if (file) loadLogoFile(file);
+          });
+
+          let searchController = null;
+          document
+            .getElementById("logo-search-form")
+            .addEventListener("submit", async (event) => {
+              event.preventDefault();
+              const query = document
+                .getElementById("logo-search-input")
+                .value.trim();
+              const status = document.getElementById("logo-search-status");
+              const searchButton = document.getElementById(
+                "logo-search-button",
+              );
+              if (query.length < 2) {
+                status.textContent = "Enter at least 2 characters to search.";
+                return;
+              }
+
+              if (searchController) searchController.abort();
+              searchController = new AbortController();
+              const controller = searchController;
+              searchButton.disabled = true;
+              searchResults.replaceChildren();
+              status.textContent = "Searching Simple Icons…";
+              try {
+                const params = new URLSearchParams({
+                  query,
+                  limit: "24",
+                  prefix: "simple-icons",
+                });
+                const response = await fetch(
+                  `https://api.iconify.design/search?${params}`,
+                  { signal: controller.signal },
+                );
+                if (!response.ok) {
+                  throw new Error(`Logo search failed (${response.status}).`);
+                }
+                const data = await response.json();
+                if (!Array.isArray(data.icons)) {
+                  throw new Error("Logo search returned an invalid response.");
+                }
+                const iconNames = data.icons.filter(
+                  (icon) => /^simple-icons:[a-z0-9-]+$/.test(icon),
+                );
+                if (!iconNames.length) {
+                  status.textContent = `No logos found for “${query}”.`;
+                  return;
+                }
+
+                status.textContent = `${iconNames.length} logos found. Select one to use it.`;
+                iconNames.forEach((iconName) => {
+                  const name = iconName.slice("simple-icons:".length);
+                  const button = document.createElement("button");
+                  button.type = "button";
+              button.className =
+  "option-btn flex min-h-[76px] flex-col items-center justify-center gap-1 rounded-xl border border-slate-200 bg-gray-100 p-2 text-center text-[0.65rem] text-black";
+                  button.title = `Use ${name} logo`;
+                  button.setAttribute("aria-label", `Use ${name} logo`);
+                  const image = document.createElement("img");
+                  image.alt = "";
+                  image.crossOrigin = "anonymous";
+                  image.src = `https://api.iconify.design/simple-icons/${name}.svg`;
+                  const label = document.createElement("span");
+                  label.className = "max-w-full truncate";
+                  label.textContent = name.replaceAll("-", " ");
+                  button.append(image, label);
+                  button.addEventListener("click", async () => {
+                    button.disabled = true;
+                    try {
+                      const logoResponse = await fetch(
+                        `https://api.iconify.design/simple-icons/${name}.svg?color=%230f172a`,
+                      );
+                      if (!logoResponse.ok) {
+                        throw new Error(
+                          `Could not load the ${name} logo (${logoResponse.status}).`,
+                        );
+                      }
+                      const svg = await logoResponse.text();
+                      if (
+                        svg.length > 1024 * 1024 ||
+                        !svg.includes("<svg") ||
+                        !svg.includes("</svg>")
+                      ) {
+                        throw new Error("The logo service returned an invalid SVG.");
+                      }
+                      setLogo(
+                        `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
+                        button,
+                      );
+                      uploadInput.value = "";
+                      Toast.show(`${name} logo added`, "success");
+                    } catch (error) {
+                      console.error("Could not load searched logo:", error);
+                      Toast.show(
+                        error instanceof Error
+                          ? error.message
+                          : "Could not load the selected logo.",
+                        "error",
+                      );
+                    } finally {
+                      button.disabled = false;
+                    }
+                  });
+                  searchResults.appendChild(button);
+                });
+              } catch (error) {
+                if (error.name === "AbortError") return;
+                console.error("Logo search failed:", error);
+                status.textContent = "Logo search failed. Check your connection and try again.";
+                Toast.show(
+                  error instanceof Error
+                    ? error.message
+                    : "Logo search failed. Try again.",
+                  "error",
+                );
+              } finally {
+                if (searchController === controller) {
+                  searchButton.disabled = false;
+                  searchController = null;
+                }
+              }
+            });
+
+          document
+            .getElementById("btn-remove-logo")
+            .addEventListener("click", () => {
+              State.qrOptions.image = "";
+              uploadInput.value = "";
+              logoGrid
+                .querySelectorAll(".option-btn")
+                .forEach((item) => item.classList.remove("active"));
+              searchResults
+                .querySelectorAll("button")
+                .forEach((item) => item.classList.remove("active"));
+              document
+                .getElementById("btn-remove-logo")
+                .classList.add("hidden");
+              updateLivePreview();
+              Toast.show("Logo removed", "info");
+            });
+          document
+            .getElementById("logo-size")
+            .addEventListener("input", (e) => {
+              document.getElementById("logo-size-val").innerText =
+                Math.round(e.target.value * 100) + "%";
+              State.qrOptions.imageOptions.imageSize = parseFloat(
+                e.target.value,
+              );
+              updateLivePreview();
+            });
+          document
+            .getElementById("logo-margin")
+            .addEventListener("input", (e) => {
+              document.getElementById("logo-margin-val").innerText =
+                e.target.value + "px";
+              State.qrOptions.imageOptions.margin = parseInt(e.target.value);
+              updateLivePreview();
+            });
+          document
+            .getElementById("logo-bg-hide")
+            .addEventListener("change", (e) => {
+              State.qrOptions.imageOptions.hideBackgroundDots =
+                e.target.checked;
+              updateLivePreview();
+            });
+          document
+            .getElementById("logo-save-blob")
+            .addEventListener("change", (e) => {
+              State.qrOptions.imageOptions.saveAsBlob = e.target.checked;
+            });
+        },
+
+        bindLayout() {
+          document
+            .getElementById("layout-width")
+            .addEventListener("input", (e) => {
+              document.getElementById("layout-width-val").innerText =
+                e.target.value + "px";
+              State.qrOptions.width = State.qrOptions.height = parseInt(
+                e.target.value,
+              );
+              updateLivePreview();
+            });
+
+          // Bug fix #9: single setMargin that clamps and always reflects actual state
+          const marginSlider = document.getElementById("layout-margin");
+          const marginNum = document.getElementById("layout-margin-num");
+          const setMargin = (raw, source) => {
+            const v = Math.max(0, Math.min(800, isNaN(raw) ? 0 : raw));
+            State.qrOptions.margin = v;
+            document.getElementById("layout-margin-val").innerText = v + "px";
+            if (source !== "slider") marginSlider.value = Math.min(400, v);
+            if (source !== "num") marginNum.value = v;
+            updateLivePreview();
+          };
+          marginSlider.addEventListener("input", (e) =>
+            setMargin(parseInt(e.target.value), "slider"),
+          );
+          marginNum.addEventListener("input", (e) =>
+            setMargin(parseInt(e.target.value), "num"),
+          );
+
+          document
+            .getElementById("layout-typenumber")
+            .addEventListener("change", (e) => {
+              State.qrOptions.qrOptions.typeNumber =
+                parseInt(e.target.value) || 0;
+              updateLivePreview();
+            });
+          document
+            .getElementById("layout-mode")
+            .addEventListener("change", (e) => {
+              State.qrOptions.qrOptions.mode = e.target.value;
+              updateLivePreview();
+            });
+        },
+
+        bindExport() {
+          document
+            .getElementById("export-size")
+            .addEventListener("input", (e) => {
+              document.getElementById("export-size-val").innerText =
+                e.target.value + "px";
+            });
+          document
+            .getElementById("btn-download")
+            .addEventListener("click", async () => {
+              const b = document.getElementById("btn-download");
+              b.disabled = true;
+              b.innerHTML =
+                '<i class="ph ph-circle-notch animate-spin"></i> Generating...';
+              try {
+                await Renderer.triggerDownload();
+                Toast.show("QR code downloaded successfully", "success");
+              } catch (err) {
+                console.error(err);
+                Toast.show(
+                  "Export failed. Try a smaller size or remove the logo.",
+                  "error",
+                );
+              } finally {
+                b.disabled = false;
+                b.innerHTML = '<i class="ph ph-download-simple"></i> Download';
+              }
+            });
+          document.getElementById("btn-reset").addEventListener("click", () => {
+            Modal.show({
+              title: "Reset design?",
+              body: "This will clear all customizations and restore the default QR code. This action cannot be undone.",
+              type: "danger",
+              confirmText: "Reset",
+              onConfirm: () => location.reload(),
+            });
+          });
+          document
+            .getElementById("btn-randomize")
+            .addEventListener("click", () => this.randomizeDesign());
+          const copyButton = document.getElementById("btn-copy-qr");
+          copyButton.addEventListener("click", async () => {
+            copyButton.disabled = true;
+            try {
+              await Renderer.copyToClipboard();
+              Toast.show("QR image copied to clipboard", "success");
+            } catch (err) {
+              console.error("QR clipboard copy failed:", err);
+              Toast.show(
+                err instanceof Error
+                  ? err.message
+                  : "Could not copy the QR image to the clipboard.",
+                "error",
+              );
+            } finally {
+              copyButton.disabled = false;
+            }
+          });
+        },
+
+        randomizeDesign() {
+          const pick = (values) =>
+            values[Math.floor(Math.random() * values.length)];
+          const palette = pick(RANDOM_DESIGN_PALETTES);
+          State.solidColors.dots = palette.dots;
+          State.solidColors.bg = palette.background;
+          State.solidColors.cornerSq = palette.accent;
+          State.solidColors.cornerDot = palette.accent;
+          State.transparentBg = false;
+
+          Object.keys(State.gradients).forEach((key) => {
+            State.gradients[key].enabled = false;
+            document.getElementById(`grad-${key}-enabled`).checked = false;
+            updateGradientPreview(key);
+          });
+
+          const chooseStyle = (gridId, optionKey) => {
+            const options = [
+              ...document.querySelectorAll(`#${gridId} .option-btn`),
+            ];
+            const selected = pick(options);
+            State.qrOptions[optionKey].type = selected.dataset.val;
+          };
+          chooseStyle("pattern-options", "dotsOptions");
+          chooseStyle("corners-square-options", "cornersSquareOptions");
+          chooseStyle("corners-dot-options", "cornersDotOptions");
+          State.qrOptions.shape = pick(["square", "circle"]);
+          if (State.qrOptions.image) {
+            State.qrOptions.qrOptions.errorCorrectionLevel = "H";
+          }
+
+          document.getElementById("bg-transparent").checked = false;
+          setColorSubview("solid");
+          this.syncUIFromState();
+          updateLivePreview();
+          Toast.show("Generated a new QR design", "success");
+        },
+
+        renderTemplates() {
+          const c = document.getElementById("templates-container");
+          TemplatesData.forEach((t) => {
+            const previewOpts = JSON.parse(JSON.stringify(t.opts));
+            const tmp = new QRCodeStyling({
+              width: 140,
+              height: 140,
+              data: "https://qrcraft.dev",
+              margin: 4,
+              ...previewOpts,
+            });
+            const card = document.createElement("div");
+            card.className = "template-card";
+            const wrap = document.createElement("div");
+            tmp.append(wrap);
+            setTimeout(() => {
+              const cv = wrap.querySelector("canvas");
+              if (cv) {
+                const img = document.createElement("img");
+                img.src = cv.toDataURL();
+                card.innerHTML = "";
+                card.appendChild(img);
+                const n = document.createElement("div");
+                n.className = "template-name";
+                n.innerText = t.name;
+                card.appendChild(n);
+              }
+            }, 120);
+            card.addEventListener("click", () => {
+              // Turn off all gradients
+              Object.keys(State.gradients).forEach((k) => {
+                State.gradients[k].enabled = false;
+                const cb = document.getElementById(`grad-${k}-enabled`);
+                if (cb) cb.checked = false;
+                updateGradientPreview(k);
+              });
+
+              // Bug fix #8: templates write to State.solidColors, not qrOptions
+              if (t.opts.dotsOptions?.color)
+                State.solidColors.dots = t.opts.dotsOptions.color;
+              if (t.opts.backgroundOptions?.color)
+                State.solidColors.bg = t.opts.backgroundOptions.color;
+              if (t.opts.cornersSquareOptions?.color)
+                State.solidColors.cornerSq = t.opts.cornersSquareOptions.color;
+              if (t.opts.cornersDotOptions?.color)
+                State.solidColors.cornerDot = t.opts.cornersDotOptions.color;
+
+              // Apply types — bug fix #3 & #4: guard undefined and preserve roundSize
+              [
+                "dotsOptions",
+                "backgroundOptions",
+                "cornersSquareOptions",
+                "cornersDotOptions",
+              ].forEach((key) => {
+                const opts = t.opts[key] || {};
+                const { color, gradient, ...rest } = opts; // strip color/gradient; they go through solidColors
+                const merged = { ...State.qrOptions[key], ...rest };
+                // dotsOptions must keep roundSize from State (template doesn't include it)
+                if (key === "dotsOptions")
+                  merged.roundSize = State.qrOptions.dotsOptions.roundSize;
+                State.qrOptions[key] = merged;
+              });
+
+              this.syncUIFromState();
+              updateLivePreview();
+              Toast.show(`Applied "${t.name}"`, "success");
+            });
+            c.appendChild(card);
+          });
+        },
+
+        syncUIFromState() {
+          const syncGrid = (gridId, val) => {
+            const g = document.getElementById(gridId);
+            if (!g) return;
+            g.querySelectorAll(".option-btn").forEach((b) =>
+              b.classList.toggle("active", b.dataset.val === val),
+            );
+          };
+          syncGrid("pattern-options", State.qrOptions.dotsOptions.type);
+          syncGrid(
+            "corners-square-options",
+            State.qrOptions.cornersSquareOptions.type,
+          );
+          syncGrid(
+            "corners-dot-options",
+            State.qrOptions.cornersDotOptions.type,
+          );
+          syncSolidInputsFromState();
+          document.getElementById("qr-shape").value = State.qrOptions.shape;
+          document.getElementById("qr-type").value = State.qrOptions.type;
+          document.getElementById("round-size").checked =
+            State.qrOptions.dotsOptions.roundSize;
+          document.getElementById("bg-transparent").checked =
+            State.transparentBg;
+          const errorLevels = ["L", "M", "Q", "H"];
+          const errorLabels = [
+            "Low (7%)",
+            "Medium (15%)",
+            "Quartile (25%)",
+            "High (30%)",
+          ];
+          const errorIndex = errorLevels.indexOf(
+            State.qrOptions.qrOptions.errorCorrectionLevel,
+          );
+          if (errorIndex >= 0) {
+            document.getElementById("error-slider").value = errorIndex;
+            document.getElementById("error-val").textContent =
+              errorLabels[errorIndex];
+          }
+        },
+      };
+
+      document.addEventListener("DOMContentLoaded", () => App.init());
+    </script>
+  </body>
+</html>
